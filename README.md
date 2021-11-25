@@ -1,6 +1,6 @@
 # Escolinha do Professor Arruda :sparkles: :school_satchel:
 
-![arrudelas](./assets/arruda.png)
+![arrudelas](./src/assets/arruda.png)
 
 ## Build do Projeto
 
