@@ -3,6 +3,10 @@
   background-color: #ffffff5c;
 }
 
+.item:hover {
+  background-color: #ffffff16;
+}
+
 .item-title {
   font-size: 1.1rem;
   font-weight: 600;

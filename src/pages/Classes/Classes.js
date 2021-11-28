@@ -21,12 +21,15 @@ export default function Classes() {
                 </div>
 
                 <Box sx={{ display: 'flex', alignItems: 'end' }}>
-                    <TextField id="outlined-basic" label="Pesquisar aula" variant="outlined" inputProps={{
+                    <TextField id="outlined-basic" placeholder="Pesquisar aula" variant="filled" InputProps={{
                         startAdornment: (
-                            < InputAdornment position="start" >
+                            <InputAdornment position="start" >
                                 <Search />
                             </InputAdornment>
-                        )
+                        ),
+                        style: {
+                            backgroundColor: 'white'
+                        },
                     }} />
                 </Box>
             </Box>
