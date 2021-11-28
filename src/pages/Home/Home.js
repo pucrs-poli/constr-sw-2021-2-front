@@ -1,6 +1,6 @@
-import { List, ListItem, Typography } from "@material-ui/core";
+import { List, ListItem, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import './Home.scss';
+import './Home.css';
 
 export default function Home() {
     return (
