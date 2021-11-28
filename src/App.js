@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home/Home';
+import Classes from './pages/Classes/Classes';
 import AppToolbar from "./components/AppToolbar";
 import { createTheme, ThemeProvider } from '@mui/material';
 
@@ -24,8 +25,7 @@ function App() {
         <AppToolbar />
         <Routes>
           <Route exact path='/' element={<Home />} />
-          <Route path='/exemplo1' element={'tela1'} />
-          <Route path='/exemplo2' element={'tela2'} />
+          <Route path='/aulas' element={<Classes />} />
         </Routes>
       </Router>
     </ThemeProvider>
