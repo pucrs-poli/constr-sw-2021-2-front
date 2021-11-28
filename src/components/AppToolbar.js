@@ -3,8 +3,14 @@
 import { AppBar, IconButton, Toolbar } from "@mui/material";
 import { Menu, HomeOutlined, AccountCircle } from '@mui/icons-material';
 import { Box } from "@mui/system";
+import { useNavigate } from 'react-router-dom';
 
 export default function AppToolbar() {
+    const navigate = useNavigate()
+    const onHomeButtonClick = () => {
+        navigate('/', { replace: true })
+    }
+
     return (
         <AppBar position="static">
             <Toolbar variant="dense">
@@ -24,6 +30,7 @@ export default function AppToolbar() {
                     color="inherit"
                     aria-label="menu"
                     sx={{ mr: 2 }}
+                    onClick={onHomeButtonClick}
                 >
                     <HomeOutlined />
                 </IconButton>

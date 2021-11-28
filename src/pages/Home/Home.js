@@ -1,19 +1,12 @@
-import { List, ListItem, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Typography } from "@mui/material";
+import AppDashboard from "../../components/AppDashboard";
 import './Home.css';
 
 export default function Home() {
     return (
         <main>
-            <Typography>Esta é a Home.</Typography>
-            <List>
-                <ListItem>
-                    <Link to="/tela1">Tela 1</Link>
-                </ListItem>
-                <ListItem>
-                    <Link to="/tela2">Tela 2</Link>
-                </ListItem>
-            </List>
+            <Typography sx={{ flexGrow: 1, textAlign: 'center', my: 2 }} variant="h6">Escolinha do Professor Arruda</Typography>
+            <AppDashboard />
         </main>
     );
 }
