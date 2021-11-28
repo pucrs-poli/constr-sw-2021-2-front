@@ -3,7 +3,8 @@ import './App.css';
 import Home from './pages/Home/Home';
 import Classes from './pages/Classes/Classes';
 import AppToolbar from "./components/AppToolbar";
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { Box } from '@mui/system';
 
 function App() {
   const theme = createTheme({
@@ -15,20 +16,23 @@ function App() {
         main: "#100C06"
       },
       background: {
-        main: "#EEF1EF"
+        default: "#EEF1EF"
       }
     }
   });
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Router>
         <AppToolbar />
-        <Routes>
-          <Route exact path='/' element={<Home />} />
-          <Route path='/aulas' element={<Classes />} />
-        </Routes>
+        <Box sx={{ mx: 12 }} >
+          <Routes >
+            <Route exact path='/' element={<Home />} />
+            <Route path='/aulas' element={<Classes />} />
+          </Routes>
+        </Box>
       </Router>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
 

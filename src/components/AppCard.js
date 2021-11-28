@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 export default function AppCard(props) {
     const navigate = useNavigate();
     const onCardClick = () => {
+        if (!props.routeTo) {
+            return;
+        }
         navigate(props.routeTo, { replace: true })
     }
 
