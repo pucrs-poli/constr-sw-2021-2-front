@@ -1,0 +1,20 @@
+.item {
+  border-bottom: 1px solid #aaa;
+  background-color: #ffffff5c;
+}
+
+.item:hover {
+  background-color: #ffffff16;
+}
+
+.item-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.item-group,
+.item-resources {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #6d8a96;
+}
