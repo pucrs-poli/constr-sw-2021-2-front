@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home/Home';
 import Classes from './pages/Classes/Classes';
+import Alunos from './pages/Alunos/Alunos';
+import Matriculas from './pages/Matriculas/Matriculas';
 import AppToolbar from "./components/AppToolbar";
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Box } from '@mui/system';
@@ -29,6 +31,8 @@ function App() {
           <Routes >
             <Route exact path='/' element={<Home />} />
             <Route path='/aulas' element={<Classes />} />
+            <Route path='/alunos' element={<Alunos />} />
+            <Route path='/alunos/:aluno_id/matriculas' element={<Matriculas />} />
           </Routes>
         </Box>
       </Router>
