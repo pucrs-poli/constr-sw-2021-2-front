@@ -14,10 +14,10 @@ export default class AppTableItem extends React.Component {
                     <div class="item-resources">{this.props.resources}</div>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: "center" }}>
-                    <IconButton>
+                    <IconButton onClick={this.props.onEditClick}>
                         <Edit />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={this.props.onDeleteClick}>
                         <Delete color="error" />
                     </IconButton>
                 </Box>
