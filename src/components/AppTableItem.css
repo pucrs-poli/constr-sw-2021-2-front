@@ -18,3 +18,8 @@
   font-weight: 400;
   color: #6d8a96;
 }
+
+a {
+  text-decoration: none;
+  color: #000; 
+}
