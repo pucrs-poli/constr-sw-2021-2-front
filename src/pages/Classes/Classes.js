@@ -6,6 +6,13 @@ import AppTable from '../../components/AppTable';
 import './Classes.css';
 
 export default function Classes() {
+    const keysLabels = {
+      //title: "Título",
+      group: "Grupo",
+      resources: "Recursos",
+    };
+
+    const titleKey = "title";
 
     const mockClass = { title: 'Construção de Software', group: 'T102', resources: 'Notebook #32' };
     const mockClasses = Array(4).fill(mockClass);
@@ -34,7 +41,7 @@ export default function Classes() {
                 </Box>
             </Box>
 
-            <AppTable items={mockClasses}></AppTable>
+            <AppTable items={mockClasses} keysLabels={keysLabels} titleKey={titleKey} ></AppTable>
         </Box >
     );
 }
