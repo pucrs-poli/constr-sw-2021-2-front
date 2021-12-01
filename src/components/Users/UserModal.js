@@ -57,7 +57,7 @@ export default function UserModal() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Box id="modal-title" sx={{ display: 'flex', mb: 2 }}> 
+                    <Box id="modal-header" sx={{ display: 'flex', mb: 2 }}> 
                         <div class="title">
                             <Person fontSize="large" style={{fill: "#647A79"}}/>
                             <Box sx={{ ml: 1, color: "#647A79" }}>
@@ -101,11 +101,11 @@ export default function UserModal() {
                             </Select>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px" }}> 
-                            <TextField id="standard-basic" label="Senha" variant="standard"/>
-                            <TextField id="standard-basic" label="Repetir Senha" variant="standard"/>
+                            <TextField id="standard-basic" label="Senha" type="password" variant="standard"/>
+                            <TextField id="standard-basic" label="Repetir Senha" type="password" variant="standard"/>
                         </Box>
                     </Box>
-                    <Box id="modal-bottom" sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: "10px" }}> 
+                    <Box id="modal-footer" sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: "10px" }}> 
                         <Button variant="outlined" onClick={handleClose} startIcon={<Close />}>Cancelar</Button>
                         <Button variant="contained" onClick={handleClose} endIcon={<Send />}>Criar</Button>
                     </Box>
