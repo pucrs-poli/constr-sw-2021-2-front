@@ -6,11 +6,11 @@ import "./AppTable.css";
 export default class AppTable extends React.Component {
 
   onEditClick = (itemId) => {
-    this.props.onEditClick(itemId);
+    this.props.onEditClick && this.props.onEditClick(itemId);
   }
 
   onRemoveClick = (itemId) => {
-    this.props.onRemoveClick(itemId);
+    this.props.onRemoveClick && this.props.onRemoveClick(itemId);
   }
 
   render() {
