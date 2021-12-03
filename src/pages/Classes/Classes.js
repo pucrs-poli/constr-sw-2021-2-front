@@ -8,6 +8,14 @@ import './Classes.css';
 import { Add } from "@mui/icons-material";
 
 export default function Classes() {
+    const keysLabels = {
+        //title: "Título",
+        group: "Grupo",
+        resources: "Recursos",
+    };
+
+    const titleKey = "title";
+
     const mockClass = { title: 'Construção de Software', group: 'T102', resources: 'Notebook #32' };
     const mockClasses = Array(4).fill(mockClass);
     const [modalOpen, setModalOpen] = React.useState(false);
@@ -54,7 +62,7 @@ export default function Classes() {
                 </Box>
             </Box>
 
-            <AppTable items={mockClasses} onEditClick={onEditClick} onDeleteClick={onDeleteClick}></AppTable>
+            <AppTable items={mockClasses} keysLabels={keysLabels} titleKey={titleKey} ></AppTable>
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
                 <Fab variant="extended" color="primary" sx={{ minWidth: 150 }} onClick={onCreateClick}><Add />CRIAR</Fab>
