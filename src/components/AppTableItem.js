@@ -9,9 +9,9 @@ export default class AppTableItem extends React.Component {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 3, px: 2 }} className="item">
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <div class="item-title">{this.props.title}</div>
-                    <div class="item-group">{this.props.group}</div>
-                    <div class="item-resources">{this.props.resources}</div>
+                    <div className="item-title">{this.props.title}</div>
+                    <div className="item-group">{this.props.group}</div>
+                    <div className="item-resources">{this.props.resources}</div>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: "center" }}>
                     <IconButton onClick={this.props.onEditClick}>

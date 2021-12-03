@@ -8,10 +8,6 @@ export const actionTypes = {
 }
 
 export function ClassConfirmationDialog(props) {
-
-    if (!Object.values(actionTypes).includes(props.action)) {
-        throw new Error('Ação da modal é inválida');
-    }
     const actionText = actionTypes[props.action];
 
     return (

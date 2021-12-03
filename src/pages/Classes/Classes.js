@@ -33,7 +33,7 @@ export default function Classes() {
     return (
         <Box sx={{ mx: { lg: 24, xl: 36 }, mt: 4, display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                <div class="title">
+                <div className="title">
                     <MenuBook fontSize="large" />
                     <Box sx={{ ml: 1 }}>
                         Aulas
