@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Search } from "@mui/icons-material";
 import BookIcon from '@mui/icons-material/Book';
 import { InputAdornment, TextField } from "@mui/material";
@@ -9,7 +9,10 @@ import AppTable from "../../components/AppTable";
 import "./Disciplinas.css";
 
 export default function Disciplinas() {
-  const [tableList, setTableList] = useState([])
+  const [tableList, setTableList] = useState([]);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalAction, setModalAction] = React.useState('');
+  const [modalItem, setModalItem] = React.useState({});
   const incommingTableList = [
     {'titulo': 'Construção de Software', 'val': '2019', 'desc': 'Elaboração e Criação de Software, aplicando metodologias aprendidas em aula.', 'ement': 'Testanto a ementa', 'cod': 'NCP1992', 'cred': '4', 'carghr': '120h'},
     {'titulo': 'Algoritmos e Estruturas de Dados 1', 'val': '2019', 'desc': 'Compreensão de algoritmos e estruturas de dados básicos.', 'ement': 'Testanto a ementa', 'cod': 'LPZ1002', 'cred': '4', 'carghr': '120h'},
@@ -45,6 +48,20 @@ export default function Disciplinas() {
       }
     }
     setTableList(auxList)
+  }
+
+  const handleCRUDClick = (id, actionType) => {
+      const classItem = id
+          ? mockClasses.find(objClass => objClass.id === id)
+          : new Class();
+
+      openModal(actionType, classItem);
+  }
+
+  const openModal = (action, itemProps) => {
+      setModalAction(action);
+      setModalItem(itemProps);
+      setModalOpen(true);
   }
 
   return (
@@ -85,6 +102,10 @@ export default function Disciplinas() {
       </Box>
 
       <AppTable items={tableList} titleKey={'titulo'} keysLabels={titleKeyList} ></AppTable>
+
+      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Fab variant="extended" color="primary" sx={{ minWidth: 150 }} onClick={() => handleCRUDClick(null, actionTypes.create)}><Add />CRIAR</Fab>
+      </Box>
     </Box>
   );
 }
