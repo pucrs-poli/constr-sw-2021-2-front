@@ -2,7 +2,7 @@ import { Person } from "@mui/icons-material";
 import { InputBase } from "@mui/material";
 import { Box } from "@mui/system";
 import UserTable from '../../components/Users/UserTable';
-import UserModal from '../../components/Users/UserModal';
+import UserModalCreate from '../../components/Users/Modals/UserModalCreate';
 
 import './Users.css';
 
@@ -36,7 +36,7 @@ export default function Users() {
                                 }
                             }}
                         />
-                        <UserModal/>
+                        <UserModalCreate/>
                     </Box>
                 </Box>
 
