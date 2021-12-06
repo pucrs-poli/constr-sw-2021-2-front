@@ -64,15 +64,12 @@ export function UserModal(props) {
     const handleConfirmClick = () => {
         switch (actionText) {
             case actionTypes.create:
-                console.log("create user");
                 dispatch(addNewUser(userItem));
                 break;
             case actionTypes.edit:
-                console.log("edit user");
                 dispatch(updateUser(userItem.matricula, userItem));
                 break;
             case actionTypes.remove:
-                console.log("remove user");
                 dispatch(deleteUser(userItem.matricula));
                 break;
             default:

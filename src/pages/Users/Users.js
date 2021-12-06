@@ -18,8 +18,6 @@ export default function Users() {
   const usersStatus = useSelector((state) => state.users.status)
   const error = useSelector((state) => state.users.error)
 
-  const [searchInputValue, setSearchInputValue] = React.useState("")
-
   React.useEffect(() => {
     if (usersStatus === 'idle') {
       dispatch(fetchUsers())
@@ -47,16 +45,15 @@ export default function Users() {
     const [modalItem, setModalItem] = React.useState({});
 
     const handleCRUDClick = (reg, actionType) => {
-        const userItem =  reg
-        ? users.find(objUser => objUser.reg === reg)
+        const userItem = reg
+        ? users.find(objUser => objUser.matricula === reg)
         : new UserModel();
-
         openModal(actionType, userItem);
     }
 
     const openModal = (action, itemProps) => {
         setModalAction(action);
-        setModalItem(new UserModel());
+        setModalItem(itemProps);
         setModalOpen(true);
     }
 
