@@ -1,10 +1,19 @@
-import EditUserModal from "./EditUserModal"
 import { Box } from "@mui/system"
 import React from "react";
 import './UserTableItem.css';
-import DeleteUserModal from "./DeleteUserModal";
+import { Delete, Edit } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 
 export default class AppTableItem extends React.Component {
+
+    onEditClick = () => {
+        this.props.onEditClick(this.props.reg);
+    }
+
+    onRemoveClick = () => {
+        this.props.onRemoveClick(this.props.reg);
+    }
+
     render() {
         const roles = this.props.roles.map(item => (
             <Box className="item-roles">
@@ -24,8 +33,12 @@ export default class AppTableItem extends React.Component {
                     <Box sx={{ display: 'flex', flexDirection: 'row'}}>
                         {roles}
                     </Box>
-                    <EditUserModal/>
-                    <DeleteUserModal props={this.props.reg}/>
+                    <IconButton onClick={this.onEditClick}>
+                        <Edit />
+                    </IconButton>
+                    <IconButton onClick={this.onRemoveClick}>
+                        <Delete color="error" />
+                    </IconButton>
                 </Box>
             </Box>
         );

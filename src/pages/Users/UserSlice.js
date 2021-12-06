@@ -14,11 +14,11 @@ const initialState = {
 export const fetchUsers = createAsyncThunk('getUsers', async () => {
   // const response = await API.get('usuarios')
   const mockUser = {
-    email: "rabeloexample.com",
+    email: "rabelo@example.com",
     login: "string",
-    nome: "string",
-    papeis: [],
-    matricula: "string",
+    nome: "Gabriel Rabelo",
+    papeis: ['ADMIN','PROFESSOR'],
+    matricula: "123456789",
     senha: "string"
   };
   // console.log(response);
