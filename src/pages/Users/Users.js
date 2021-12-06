@@ -1,15 +1,45 @@
 import { Person } from "@mui/icons-material";
 import { InputBase } from "@mui/material";
 import { Box } from "@mui/system";
-import UserTable from '../../components/Users/UserTable';
 import UserModal from '../../components/Users/UserModal';
+import { useSelector, useDispatch } from 'react-redux'
+import { Spinner } from '../../components/Spinner'
+import UserTable from '../../components/Users/UserTable'
+import React from 'react'
+import { selectAllUsers, fetchUsers } from "./UserSlice";
 
 import './Users.css';
 
 export default function Users() {
+  const dispatch = useDispatch()
+  const users = useSelector(selectAllUsers)
 
-    const mockUser = { name: 'Gabriel Rabelo', reg: '123456789', email: 'rabelo@example.com', roles: ['admin', 'professor'] };
-    const mockUsers = Array(10).fill(mockUser);
+  const usersStatus = useSelector((state) => state.users.status)
+  const error = useSelector((state) => state.users.error)
+
+  const [searchInputValue, setSearchInputValue] = React.useState("")
+
+  React.useEffect(() => {
+    if (usersStatus === 'idle') {
+      dispatch(fetchUsers())
+    }
+  }, [usersStatus, dispatch])
+
+    let content
+
+    if (usersStatus === 'loading') {
+        content = <Spinner text="Carregando usuários..." />
+    } else if (usersStatus === 'succeeded') {
+        content = <UserTable items={users}/>        
+    } else if (usersStatus === 'failed') {
+        content = <div>{error}</div>
+    }
+
+    const handleSearchBarValueChange = (event) => {
+        if (event.target.value == "") {
+            dispatch(fetchUsers());
+        }
+    }
 
     return (
         <div>
@@ -35,12 +65,12 @@ export default function Users() {
                                     width: '150px',
                                 }
                             }}
+                            onChange={handleSearchBarValueChange}
                         />
                         <UserModal/>
                     </Box>
                 </Box>
-
-                <UserTable items={mockUsers}></UserTable>
+                {content}
             </Box >
         </div>
     );

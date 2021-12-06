@@ -1,8 +1,8 @@
-import { Edit, Delete } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import { Box } from "@mui/system";
+import EditUserModal from "./EditUserModal"
+import { Box } from "@mui/system"
 import React from "react";
 import './UserTableItem.css';
+import DeleteUserModal from "./DeleteUserModal";
 
 export default class AppTableItem extends React.Component {
     render() {
@@ -11,10 +11,9 @@ export default class AppTableItem extends React.Component {
                 <p>{item}</p>
             </Box>
         ));
-
         return (
             <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 3, px: 2 }} className="item">
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column'}}>
                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                         <div class="item-name">{this.props.name}</div>
                         <div class="item-reg">{this.props.reg}</div>
@@ -25,12 +24,8 @@ export default class AppTableItem extends React.Component {
                     <Box sx={{ display: 'flex', flexDirection: 'row'}}>
                         {roles}
                     </Box>
-                    <IconButton>
-                        <Edit />
-                    </IconButton>
-                    <IconButton>
-                        <Delete color="error" />
-                    </IconButton>
+                    <EditUserModal/>
+                    <DeleteUserModal props={this.props.reg}/>
                 </Box>
             </Box>
         );

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Person, Add, Close, Send } from "@mui/icons-material";
 import {Box, Button, Modal, TextField, InputLabel, Select, MenuItem, OutlinedInput, Checkbox, ListItemText} from '@mui/material';
+import { useDispatch } from 'react-redux'
+import { addNewUser } from '../../pages/Users/UserSlice';
 
 const style = {
     position: 'absolute',
@@ -25,26 +27,50 @@ const MenuProps = {
 };
 
 const rolesArr = [
-    'Admin',
-    'Professor',
-    'Estudante',
+    'ADMIN',
+    'PROFESSOR',
+    'ALUNO',
 ];
 
 export default function UserModal() {
+    const dispatch = useDispatch()
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [roles, setroles] = React.useState([]);
+    const [registration, setRegistration] = React.useState("");
+    const [userName, setUsername] = React.useState("");
+    const [name, setName] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [roles, setRoles] = React.useState([]);
+    const [password, setPassword] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
+
+    React.useEffect(() => {
+        setRoles([]);
+      }, [open])
 
     const handleChange = (event) => {
         const {
                 target: { value },
         } = event;
-        setroles(
-            // On autofill we get a the stringified value.
-                typeof value === 'string' ? value.split(',') : value,
+        setRoles(
+            typeof value === 'string' ? value.split(',') : value,
         );
+    };
+
+    const hanbleConfirmAction = () => {
+        const user = {  email: email, 
+                        login: userName,
+                        nome: name,
+                        papeis: roles,
+                        matricula: registration,
+                        senha: password
+                    };
+
+        dispatch(addNewUser(user));
+        handleClose();
     };
 
     return (
@@ -72,12 +98,12 @@ export default function UserModal() {
                     </Box>
                     <Box id="modal-body" sx={{ display: 'flex', flexDirection: "column", mt: 2, gap: "10px"}} >
                         <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px" }}> 
-                            <TextField id="standard-basic" label="Matrícula" variant="standard"/>
-                            <TextField id="standard-basic" label="Nome de Usuário" variant="standard"/>
+                            <TextField id="standard-basic" label="Matrícula" variant="standard" onChange={event => setRegistration(event.target.value)}/>
+                            <TextField id="standard-basic" label="Nome de Usuário" variant="standard" onChange={event => setUsername(event.target.value)}/>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px" }}> 
-                            <TextField id="standard-basic" label="Nome de Perfil" variant="standard"/>
-                            <TextField id="standard-basic" label="E-mail" variant="standard"/>
+                            <TextField id="standard-basic" label="Nome de Perfil" variant="standard" onChange={event => setName(event.target.value)}/>
+                            <TextField id="standard-basic" label="E-mail" variant="standard" onChange={event => setEmail(event.target.value)}/>
                         </Box>
                         <Box sx={{mt: 1}}> 
                             <InputLabel id="roles">Papéis</InputLabel>
@@ -101,13 +127,13 @@ export default function UserModal() {
                             </Select>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px" }}> 
-                            <TextField id="standard-basic" label="Senha" type="password" variant="standard"/>
-                            <TextField id="standard-basic" label="Repetir Senha" type="password" variant="standard"/>
+                            <TextField id="standard-basic" label="Senha" type="password" variant="standard" onChange={event => setPassword(event.target.value)}/>
+                            <TextField id="standard-basic" label="Repetir Senha" type="password" variant="standard" onChange={event => setConfirmPassword(event.target.value)}/>
                         </Box>
                     </Box>
                     <Box id="modal-footer" sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, gap: "10px" }}> 
                         <Button variant="outlined" onClick={handleClose} startIcon={<Close />}>Cancelar</Button>
-                        <Button variant="contained" onClick={handleClose} endIcon={<Send />}>Criar</Button>
+                        <Button variant="contained" onClick={hanbleConfirmAction} endIcon={<Send />}>Criar</Button>
                     </Box>
                 </Box>
             </Modal>

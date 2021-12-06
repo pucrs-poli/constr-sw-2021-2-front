@@ -8,7 +8,7 @@ export default class AppTable extends React.Component {
         const items = this.props.items
             .map(item => (
                 <Box className=".item-container">
-                    <UserTableItem name={item.name} reg={item.reg} email={item.email} roles={item.roles} />
+                    <UserTableItem name={item.nome} reg={item.matricula} email={item.email} roles={item.papeis} />
                 </Box>
             ));
 
