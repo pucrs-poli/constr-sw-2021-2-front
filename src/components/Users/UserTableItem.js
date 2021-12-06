@@ -5,6 +5,15 @@ import React from "react";
 import './UserTableItem.css';
 
 export default class AppTableItem extends React.Component {
+
+    onEditClick = () => {
+        this.props.onEditClick(this.props.reg);
+    }
+
+    onRemoveClick = () => {
+        this.props.onRemoveClick(this.props.reg);
+    }
+
     render() {
         const roles = this.props.roles.map(item => (
             <Box className="item-roles">
@@ -25,10 +34,10 @@ export default class AppTableItem extends React.Component {
                     <Box sx={{ display: 'flex', flexDirection: 'row'}}>
                         {roles}
                     </Box>
-                    <IconButton>
+                    <IconButton onClick={this.onEditClick}>
                         <Edit />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={this.onRemoveClick}>
                         <Delete color="error" />
                     </IconButton>
                 </Box>
