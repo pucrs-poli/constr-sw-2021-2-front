@@ -1,7 +1,7 @@
 import { Edit, Delete } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { Box } from "@mui/system";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import React from "react";
 import "./AppTableItem.css";
 
@@ -26,12 +26,19 @@ export default class AppTableItem extends React.Component {
                     <div className={`item-title`}>{title}</div>
                     {Object.entries(fields)
                         .filter(([key]) => keysLabels[key])
-                        .map(([key, value], index) => (
-                            <div
-                                key={index}
-                                className={`item-resources`}
-                            >{`${keysLabels[key]}: ${value}`}</div>
-                        ))}
+                        .map(([key, value], index) =>
+                            key == 'link' ? (
+                                <Link to={{pathname: value}}>
+                                    <div className={`item-resources link`}>{`${keysLabels[key]}`}</div>
+                                </Link>
+                            ) : (
+                                <div
+                                    key={index}
+                                    className={`item-resources`}
+                                >{`${keysLabels[key]}: ${value}`}</div>
+                            )
+                        )
+                    }
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                     <IconButton onClick={this.onEditClick}>

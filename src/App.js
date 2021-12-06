@@ -34,7 +34,7 @@ function App() {
             <Route exact path='/' element={<Home />} />
             <Route path='/aulas' element={<Classes />} />
             <Route path='/tipos_recursos' element={<ResourceTypes />} />
-            <Route path='/recursos' element={<Resources />} />
+            <Route path='/recursos/:tipo_recurso' element={<Resources />} />
             <Route path='/alunos' element={<Alunos />} />
             <Route path='/alunos/:aluno_id/matriculas' element={<Matriculas />} />
           </Routes>
