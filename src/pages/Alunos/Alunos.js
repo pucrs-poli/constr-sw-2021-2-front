@@ -6,11 +6,21 @@ import AppTable from "../../components/AppTable";
 import "./Alunos.css";
 
 export default function Alunos() {
-  const mockClass = {
-    title: "Construção de Software",
-    group: "T102",
-    resources: "Notebook #32",
+  const keysLabels = {
+    email: "E-mail",
+    // birthday: "Data de nascimento",
+    phone: "Telefone",
   };
+  const titleKey = "name";
+
+  const mockClass = {
+    id: "1345",
+    name: "João Severo",
+    email: "potato@potate.com",
+    birthday: "2019-08-21T00:00:00.000Z",
+    phone: "+55(51)99455-6722",
+  };
+
   const mockClasses = Array(4).fill(mockClass);
 
   return (
@@ -31,7 +41,7 @@ export default function Alunos() {
         <Box sx={{ display: "flex", alignItems: "end" }}>
           <TextField
             id="outlined-basic"
-            placeholder="Pesquisar aula"
+            placeholder="Pesquisar aluno"
             variant="filled"
             InputProps={{
               startAdornment: (
@@ -47,8 +57,11 @@ export default function Alunos() {
         </Box>
       </Box>
 
-      <AppTable items={mockClasses}></AppTable>
+      <AppTable
+        items={mockClasses}
+        keysLabels={keysLabels}
+        titleKey={titleKey}
+      ></AppTable>
     </Box>
   );
 }
-
