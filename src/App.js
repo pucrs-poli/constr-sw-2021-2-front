@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home/Home';
 import Classes from './pages/Classes/Classes';
+import ResourceTypes from './pages/ResourceTypes/ResourceTypes';
+import Resources from './pages/Resources/Resources';
 import Alunos from './pages/Alunos/Alunos';
 import Matriculas from './pages/Matriculas/Matriculas';
 import AppToolbar from "./components/AppToolbar";
@@ -31,6 +33,8 @@ function App() {
           <Routes >
             <Route exact path='/' element={<Home />} />
             <Route path='/aulas' element={<Classes />} />
+            <Route path='/tipos_recursos' element={<ResourceTypes />} />
+            <Route path='/recursos/:tipo_recurso' element={<Resources />} />
             <Route path='/alunos' element={<Alunos />} />
             <Route path='/alunos/:aluno_id/matriculas' element={<Matriculas />} />
           </Routes>

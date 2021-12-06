@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import AppDashboard from "../../components/AppDashboard";
-import './Home.css';
+import './home.css';
 
 export default function Home() {
     return (
