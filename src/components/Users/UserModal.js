@@ -112,7 +112,7 @@ export function UserModal(props) {
                     labelId="roles"
                     id="roles-select"
                     multiple
-                    value={roles}
+                    value={userItem.roles}
                     onChange={handleChange}
                     sx={{minWidth: "100%"}}
                     input={<OutlinedInput />}
