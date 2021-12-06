@@ -19,7 +19,7 @@ export default function Classes() {
     const mockClasses = [
         new Class('0001', 'Apresentação Trabalho Constr. Software', 'T11', 'Notebook #32'),
         new Class('0002', 'Inteligência Artificial', 'T9', 'Controle Remoto #32'),
-        new Class('0003', 'Natação Aula Prática', 'T13', 'Projetor #32'),
+        new Class('0003', 'Natação Aula Prática', 'T13', 'Bóia de Patinho, Colete salva-vidas'),
         new Class('0004', 'Aula no Prédio 90', 'T12A', 'Câmera #32'),
     ]
     const [modalOpen, setModalOpen] = React.useState(false);
