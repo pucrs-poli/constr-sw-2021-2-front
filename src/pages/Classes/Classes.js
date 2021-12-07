@@ -14,6 +14,7 @@ export default function Classes() {
     const classesService = new ClassesService();
     const keysLabels = {
         numTurma: "Turma",
+        disciplina: "Disciplina",
         reserva: {
             text: "Reserva",
             value: resource => resource.Recurso.name
@@ -38,7 +39,7 @@ export default function Classes() {
     const handleCRUDClick = (id, actionType) => {
         const classItem = id
             ? classes.find(objClass => objClass.id === id)
-            : new Class();
+            : new Class({});
 
         openModal(actionType, classItem);
     }
