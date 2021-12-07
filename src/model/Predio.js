@@ -1,8 +1,7 @@
-export default class Class {
-    constructor(id, number = 1,name = '', reference = '') {
+export default class Predio {
+    constructor(id, name = '', location = '') {
         this.id = id;
-        this.number = number;
         this.name = name;
-        this.reference = reference;
+        this.location = location;
     }
 } 

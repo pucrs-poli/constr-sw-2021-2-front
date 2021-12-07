@@ -13,6 +13,9 @@ export default class AppTable extends React.Component {
     this.props.onRemoveClick && this.props.onRemoveClick(itemId);
   }
 
+  onClickItem = (itemId) => {
+    this.props.onClickItem && this.props.onClickItem(itemId);
+  }
   render() {
     const { items, titleKey, keysLabels } = this.props;
     const appTableItems = items.map((item, index) => (
@@ -24,6 +27,7 @@ export default class AppTable extends React.Component {
           keysLabels={keysLabels}
           onEditClick={this.onEditClick}
           onRemoveClick={this.onRemoveClick}
+          onClickItem={this.onClickItem}
         />
       </Box>
     ));

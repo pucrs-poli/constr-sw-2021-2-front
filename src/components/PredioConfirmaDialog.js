@@ -9,13 +9,13 @@ export const acoes = {
 }
 
 export function PredioConfirmaDialog(props) {
-    const actionText = props.action;
+    const actionText = props.actionType;
     const buildingItem = props.item;
 
     const actionTextLC = () => (actionText || "").toLowerCase();
 
     const handleConfirmClick = () => {
-        console.log(buildingItem);
+        props.action();
         closeDialog();
     }
 
@@ -43,31 +43,21 @@ export function PredioConfirmaDialog(props) {
                 margin="dense"
                 id="buildingNumber"
                 label="Predio"
-                type="number"
-                fullWidth
-                variant="filled"
-                onChange={(event) => onValueChange(event, 'number')}
-                defaultValue={buildingItem.number}
-            />
-            <TextField
-                margin="dense"
-                id="classBuilding"
-                label="Nome e Prédio"
                 type="text"
                 fullWidth
                 variant="filled"
-                defaultValue={buildingItem.name}
                 onChange={(event) => onValueChange(event, 'name')}
+                defaultValue={buildingItem.name}
             />
             <TextField
                 margin="dense"
                 id="buildingReference"
-                label="Referencia"
+                label="Localização"
                 type="text"
                 fullWidth
                 variant="filled"
-                defaultValue={buildingItem.reference}
-                onChange={(event) => onValueChange(event, 'reference')}
+                defaultValue={buildingItem.location}
+                onChange={(event) => onValueChange(event, 'location')}
             />
         </main>
     );
@@ -91,14 +81,14 @@ export function PredioConfirmaDialog(props) {
     }
 
     const renderSwitch = () => {
-        switch(actionText) {
+        switch (actionText) {
             case acoes.remove:
-              return 'EXCLUIR';
+                return 'EXCLUIR';
             case acoes.cria:
-              return 'CRIAR';
-            default :
-              return 'EDITAR';
-          }
+                return 'CRIAR';
+            default:
+                return 'EDITAR';
+        }
     }
 
     return (

@@ -46,7 +46,6 @@ export default function Salas() {
         let SalaItem = tableList.find(objSala => { return objSala.id === id });
         if (!SalaItem)
             SalaItem = new Sala();
-        console.log(actionType);
         let action = undefined;
         switch (actionType) {
             case 'Editar':

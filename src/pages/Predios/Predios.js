@@ -1,44 +1,123 @@
-import { MenuBook, Search } from "@mui/icons-material";
+import { MenuBook, Search, TextSnippet } from "@mui/icons-material";
 import { InputAdornment, TextField, Fab } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Navigate } from 'react-router-dom';
 import AppTable from '../../components/AppTable';
 import './Predios.css';
 import { PredioConfirmaDialog, acoes } from '../../components/PredioConfirmaDialog';
 import { Add } from "@mui/icons-material";
 import Predio from '../../model/Predio';
+import { getAllBuilding, deleteBuildingById, createBuilding, updateBuilding } from '../../services/Predios/Predios'
+
 
 export default function Predios() {
+    const [modalOpen, setModalOpen] = React.useState(false);
+    const [modalAction, setModalAction] = React.useState(() => { });
+    const [modalActionName, setModalActionName] = React.useState('');
+    const [modalItem, setModalItem] = React.useState({});
+    const [tableList, setTableList] = useState([]);
+    const [redirect, setRedirect] = useState(false);
+    const [redirectState, setRedirectState] = useState({});
+
     const keysLabels = {
         name: "Nome",
-        reference: "Referência",
+        location: "Localização",
     };
 
-    const titleKey = "number";
+    const titleKey = "id";
 
-    const mockPredios = [
-        new Predio('1', '32', 'Prédio 32 - Politécnica', 'Ao lado biblioteca'),
-        new Predio('2', '40', 'Prédio 40 - Adminstração', 'Em frente ao Maza')
-    ];
-
-    const [modalOpen, setModalOpen] = React.useState(false);
-    const [modalAction, setModalAction] = React.useState('');
-    const [modalItem, setModalItem] = React.useState({});
+    useEffect(() => {
+        async function fetchPredios() {
+            const data = (await getAllBuilding()).data;
+            const tableContent = [];
+            for (const el of data) {
+                const id = el.id
+                const name = el.name;
+                const location = el.location;
+                const newBuilding = new Predio(id, name, location);
+                tableContent.push(newBuilding);
+            }
+            setTableList(tableContent);
+        }
+        fetchPredios();
+    }, [])
 
     const handleCRUDClick = (id, actionType) => {
-        const PredioItem = id
-            ? mockPredios.find(objPredio => objPredio.id === id)
-            : new Predio();// Passar os parametros para criação do novo prédio
+        let PredioItem = tableList.find(objPredio => { return objPredio.id === id });
+        if (!PredioItem)
+            PredioItem = new Predio();
+        let action = undefined;
+        switch (actionType) {
+            case 'Editar':
+                action = () => { handleItemEditar(PredioItem) }
+                break;
+            case 'Cadastrar':
+                action = () => { handleItemSalvar(PredioItem); }
+                break;
+            case 'Excluir':
+                action = () => { handleItemExcluir(PredioItem) }
+                break;
+            default:
+                console.log("Invalid");
+        }
 
-        openModal(actionType, PredioItem);
+        openModal(action, PredioItem, actionType);
     }
 
-    const openModal = (action, itemProps) => {
-        setModalAction(action);
+    const handleItemEditar = async (item) => {
+        const updateObj = new Predio(item.id,
+            item.name, item.location);
+
+        await updateBuilding(updateObj).then((result) => {
+            const copy = [...tableList]
+            const elIndex = copy.findIndex((el) => el.id === updateObj.id);
+            copy[elIndex] = updateObj;
+            setTableList(copy);
+        }).catch((err) => {
+            console.log("Not able to update new Room");
+        })
+    }
+
+    const handleItemSalvar = async (item) => {
+        const newItem = new Predio("", item.name, item.location)
+        await createBuilding(newItem).then((result) => {
+            console.log(result);
+            newItem.id = result.data.id;
+            setTableList([...tableList, newItem]);
+        }).catch((err) => {
+            console.log("Not able to create new Room");
+        });
+
+    }
+
+    const handleItemExcluir = async (item) => {
+        const index = tableList.find((el) => el.id === item.id);
+        if (index) {
+            await deleteBuildingById(index.id).then(() => {
+                const newArr = tableList.filter((el) => el.id !== item.id);
+                setTableList(newArr);
+            }).catch((err) => {
+                console.log("Delete not done");
+            });
+        }
+    }
+
+    const handleRedirect = async (item) => {
+        const obj = tableList.find((el) => el.id === item);
+        localStorage.setItem("predios_salas", JSON.stringify(obj));
+        setRedirect(true);
+    }
+
+    const openModal = (action, itemProps, actionName) => {
+        setModalAction(() => action);
         setModalItem(itemProps);
         setModalOpen(true);
+        setModalActionName(actionName)
     }
-
+    if (redirect) {
+        return <Navigate to="/sala_predios" />;
+    }
     return (
         <Box
             sx={{
@@ -75,11 +154,12 @@ export default function Predios() {
             </Box>
 
             <AppTable
-                items={mockPredios}
+                items={tableList}
                 keysLabels={keysLabels}
                 titleKey={titleKey}
                 onEditClick={(id) => handleCRUDClick(id, acoes.edita)}
                 onRemoveClick={(id) => handleCRUDClick(id, acoes.remove)}
+                onClickItem={(id) => handleRedirect(id)}
             ></AppTable>
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
@@ -94,6 +174,7 @@ export default function Predios() {
             <PredioConfirmaDialog
                 open={modalOpen}
                 action={modalAction}
+                actionType={modalActionName}
                 item={modalItem}
                 toggleModal={(open) => setModalOpen(open)} />
 

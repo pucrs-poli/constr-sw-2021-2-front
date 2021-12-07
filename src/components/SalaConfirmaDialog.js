@@ -1,14 +1,13 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 export const acoes = {
     cria: 'Cadastrar',
     edita: 'Editar',
-    remove: 'Excluir'
+    remove: 'Excluir',
+    cria_em_predio: 'Cadastrar em Prédio'
 }
-
-export let returnedActionObject = {}
 
 export function SalaConfirmaDialog(props) {
     const actionText = props.actionType
@@ -85,6 +84,7 @@ export function SalaConfirmaDialog(props) {
         switch (actionText) {
             case acoes.cria:
             case acoes.edita:
+            case acoes.cria_em_predio:
                 return createEditTemplate();
             case acoes.remove:
                 return deleteTemplate();
