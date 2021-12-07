@@ -28,14 +28,14 @@ export default class AppTableItem extends React.Component {
                         .filter(([key]) => keysLabels[key])
                         .map(([key, value], index) =>
                             key == 'link' ? (
-                                <Link to={{pathname: value}}>
+                                <Link to={{ pathname: value }}>
                                     <div className={`item-resources link`}>{`${keysLabels[key]}`}</div>
                                 </Link>
                             ) : (
                                 <div
                                     key={index}
                                     className={`item-resources`}
-                                >{`${keysLabels[key]}: ${value}`}</div>
+                                >{`${keysLabels[key].text || keysLabels[key]}: ${keysLabels[key].value ? keysLabels[key].value(value) : value}`}</div>
                             )
                         )
                     }

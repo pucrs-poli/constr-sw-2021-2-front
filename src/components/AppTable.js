@@ -19,7 +19,7 @@ export default class AppTable extends React.Component {
       <Box className=".item-container" key={index}>
         <AppTableItem
           id={item.id}
-          title={item[titleKey]}
+          title={this.props.fnFormat ? this.props.fnFormat(item[titleKey]) : item[titleKey]}
           fields={item}
           keysLabels={keysLabels}
           onEditClick={this.onEditClick}

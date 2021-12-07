@@ -56,8 +56,8 @@ export function ClassConfirmationDialog(props) {
                 type="text"
                 fullWidth
                 variant="filled"
-                defaultValue={classItem.group}
-                onChange={(event) => onValueChange(event, 'group')}
+                defaultValue={classItem.numTurma}
+                onChange={(event) => onValueChange(event, 'numTurma')}
             />
             <TextField
                 margin="dense"
