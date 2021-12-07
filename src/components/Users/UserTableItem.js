@@ -7,11 +7,11 @@ import { IconButton } from "@mui/material";
 export default class AppTableItem extends React.Component {
 
     onEditClick = () => {
-        this.props.onEditClick(this.props.reg);
+        this.props.onEditClick(this.props.id);
     }
 
     onRemoveClick = () => {
-        this.props.onRemoveClick(this.props.reg);
+        this.props.onRemoveClick(this.props.id);
     }
 
     render() {

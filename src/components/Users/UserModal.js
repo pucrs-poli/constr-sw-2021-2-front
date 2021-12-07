@@ -42,35 +42,44 @@ const style = {
 export function UserModal(props) {
     const dispatch = useDispatch()
     const actionText = props.action;
-    console.log(props.item);
     const userItem = props.item;
 
     const [open] = React.useState(false);
-    const [roles, setRoles] = React.useState();
+    const [user, setUser] = React.useState({});
+    const [roles, setRoles] = React.useState([]);
+    const [passwords, setPasswords] = React.useState(["", ""]);
 
     React.useEffect(() => {
-        setRoles([]);
-      }, [open])
+        setUser(userItem);
+        setRoles(userItem.papeis ? userItem.papeis.map((item) => item.nome) : []);
+        setPasswords(["", ""]);
+    }, [userItem, open]);
 
-    const handleChange = (event) => {
+    const handleChangeRoles = (event) => {
         const {
-           target: { value },
+            target: { value },
         } = event;
-        setRoles(
-            typeof value === 'string' ? value.split(',') : value,
-        );
+
+        const newRoles = typeof value === "string" ? value.split(",") : value;
+        setRoles(newRoles);
+        setUser({ ...user, papeis: newRoles });
     };
 
     const handleConfirmClick = () => {
+         if (!validation()) {
+             return;
+         }
+
         switch (actionText) {
             case actionTypes.create:
-                dispatch(addNewUser(userItem));
+                dispatch(addNewUser(user));
                 break;
             case actionTypes.edit:
-                dispatch(updateUser(userItem.matricula, userItem));
+                console.log(user, "item");
+                dispatch(updateUser(user.id, user));
                 break;
             case actionTypes.remove:
-                dispatch(deleteUser(userItem.matricula));
+                dispatch(deleteUser(user.id));
                 break;
             default:
                 break;
@@ -78,16 +87,39 @@ export function UserModal(props) {
         closeDialog();
     }
 
+    const validation = ()  => {
+        if (user.matricula.length !== 9) {
+            alert("O número de matrícula deve ter 9 digítos")
+            return false;
+        }
+
+        if (!roles.length) {
+            alert("É necessário selecionar pelo menos um papel")
+            return false;
+        }
+
+        if (passwords[0] !== passwords[1]) {
+            alert("Senhas não conferem");
+            return false;
+        }
+
+        return true;
+    }
+
     const handleCancelClick = () => {
         closeDialog();
     }
 
     const onValueChange = (event, attribute) => {
-        const newValue = event.target.value;
-        if (!(attribute in userItem)) {
+        if (attribute === "senha") {
+            setPasswords([event.target.value, passwords[1]]);
+        }
+        if (attribute === "secondPassword") {
+            setPasswords([passwords[0], event.target.value]);
             return;
         }
-        userItem[attribute] = newValue;
+
+        setUser({ ...user, [attribute]: event.target.value });
     }
 
     const closeDialog = () => {
@@ -99,7 +131,7 @@ export function UserModal(props) {
             <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px", marginBottom: "10px"}}> 
                 <TextField 
                     id="standard-basic"
-                    onChange={(event) => onValueChange(event, 'reg')}
+                    onChange={(event) => onValueChange(event, 'matricula')}
                     defaultValue={userItem.matricula}
                     label="Matrícula" variant="standard"
                 />
@@ -114,7 +146,7 @@ export function UserModal(props) {
             <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px", marginBottom: "10px" }}> 
                 <TextField 
                     id="standard-basic"
-                    onChange={(event) => onValueChange(event, 'name')} 
+                    onChange={(event) => onValueChange(event, 'nome')} 
                     defaultValue={userItem.nome} 
                     label="Nome de Perfil" 
                     variant="standard"/>
@@ -131,11 +163,11 @@ export function UserModal(props) {
                     labelId="roles"
                     id="roles-select"
                     multiple
-                    value={userItem.papeis}
-                    onChange={handleChange}
-                    sx={{minWidth: "100%"}}
+                    value={roles}
+                    onChange={handleChangeRoles}
+                    sx={{ minWidth: "100%" }}
                     input={<OutlinedInput />}
-                    renderValue={(selected) => selected.join(', ')}
+                    renderValue={(selected) => selected.join(", ")}
                     MenuProps={MenuProps}
                 >
                     {rolesArr.map((rol) => (
@@ -149,7 +181,7 @@ export function UserModal(props) {
             <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px" }}> 
                 <TextField 
                     id="standard-basic" 
-                    onChange={(event) => onValueChange(event, 'firstPassword')} 
+                    onChange={(event) => onValueChange(event, 'senha')} 
                     defaultValue={userItem.senha}
                     label="Senha" 
                     type="password" 

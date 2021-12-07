@@ -7,26 +7,19 @@ const API = axios.create({
 
 const initialState = {
   users: [],
+  originUsers: [],
+  fetchStatus: 'idle',
   status: 'idle',
   error: null,
 }
 
-export const fetchUsers = createAsyncThunk('getUsers', async () => {
-  // const response = await API.get('usuarios')
-  const mockUser = {
-    email: "rabelo@example.com",
-    login: "string",
-    nome: "Gabriel Rabelo",
-    papeis: ['ADMIN','PROFESSOR'],
-    matricula: "123456789",
-    senha: "string"
-  };
-  // console.log(response);
-  return mockUser//response.data
+export const fetchUsers = createAsyncThunk('users', async () => {
+  const response = await API.get('usuarios')
+  return response.data
 })
 
 export const addNewUser = createAsyncThunk(
-  'createUser',
+  'addUser',
   async (newUser) => {
     const response = await API.post('usuarios', newUser)
     return response.data
@@ -36,8 +29,8 @@ export const addNewUser = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
   'deleteUser',
   async (userId) => {
-    const response = await API.delete(`usuarios/${userId}`)
-    return response.data
+    await API.delete(`usuarios/${userId}`)
+    return userId
   }
 )
 
@@ -50,7 +43,7 @@ export const updateUser = createAsyncThunk(
 )
 
 export const getUserById = createAsyncThunk(
-  'getUserById',
+  'users',
   async (userId) => {
     const response = await API.get(`usuarios/${userId}`)
     return response.data
@@ -61,44 +54,63 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    reactionAdded(state, action) {
-      const { userId, reaction } = action.payload
-      const existingUser = state.users.find((user) => user.id === userId)
-      if (existingUser) {
-        existingUser.reactions[reaction]++
-      }
+    setUsers(state, action) {
+      state.users = action.payload
     },
-    userUpdated(state, action) {
-      const { id, title, content } = action.payload
-      const existingUser = state.users.find((user) => user.id === id)
-      if (existingUser) {
-        existingUser.title = title
-        existingUser.content = content
-      }
-    },
-
-  },
+    resetErrorStatus(state, action) {
+        state.status = 'idle'
+    }
+   },
   extraReducers(builder) {
     builder
       .addCase(fetchUsers.pending, (state, action) => {
-        state.status = 'loading'
+        state.fetchStatus = 'loading'
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.status = 'succeeded'
-        state.users = state.users.concat(action.payload)
+        state.fetchStatus = 'succeeded'
+        state.users = action.payload
+        state.originUsers = action.payload
       })
       .addCase(fetchUsers.rejected, (state, action) => {
+        console.log("deu erro aqui")
+        state.fetchStatus = 'failed'
+        state.error = action.error.message
+      })
+      .addCase(addNewUser.fulfilled, (state, action) => {
+        state.users = state.users.concat(action.payload)
+        state.originUsers = state.users
+      })
+      .addCase(addNewUser.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.users = state.users.filter((user) => user.id !== action.payload)
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error.message
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        console.log(action.payload, "update payload")
+        const user = state.users.find((user) => user.id === action.payload.id)
+        var newUsers = state.users.filter((user) => user.id !== action.payload)
+        newUsers.includes(user);
+        state.users = newUsers
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
   },
 })
 
-export const { userUpdated, reactionAdded } = usersSlice.actions
+export const { setUsers, resetErrorStatus } = usersSlice.actions
 
 export default usersSlice.reducer
 
 export const selectAllUsers = (state) => state.users.users
+export const originUsers = (state) => state.users.originUsers
 
 export const selectUserById = (state, userId) =>
   state.users.users.find((user) => user.id === userId)

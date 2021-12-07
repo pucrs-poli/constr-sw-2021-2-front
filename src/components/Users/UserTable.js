@@ -4,12 +4,12 @@ import { Box } from "@mui/system";
 import './UserTable.css';
 
 export default class AppTable extends React.Component {
-    onEditClick = (itemReg) => {
-        this.props.onEditClick && this.props.onEditClick(itemReg);
+    onEditClick = (itemId) => {
+        this.props.onEditClick && this.props.onEditClick(itemId);
     }
     
-    onRemoveClick = (itemReg) => {
-        this.props.onRemoveClick && this.props.onRemoveClick(itemReg);
+    onRemoveClick = (itemId) => {
+        this.props.onRemoveClick && this.props.onRemoveClick(itemId);
     }    
 
     render() {
@@ -17,13 +17,13 @@ export default class AppTable extends React.Component {
             .map(item => (
                 <Box className=".item-container">
                 <UserTableItem
-                        id={item.matricula}
+                        id={item.id}
                         onEditClick={this.onEditClick}
                         onRemoveClick={this.onRemoveClick}
                         name={item.nome} 
                         reg={item.matricula} 
                         email={item.email} 
-                        roles={item.papeis} 
+                        roles={item.papeis == null ? [] : item.papeis.map((item) => item.nome)}
                     />
                 </Box>
             ));

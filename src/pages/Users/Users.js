@@ -7,15 +7,17 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Spinner } from '../../components/Spinner'
 import UserTable from '../../components/Users/UserTable';
 import UserModel from '../../model/UserModel';
-import { selectAllUsers, fetchUsers } from "./UserSlice";
+import { selectAllUsers, fetchUsers, originUsers, setUsers, resetErrorStatus } from "./UserSlice";
 
 import './Users.css';
 
 export default function Users() {
   const dispatch = useDispatch()
   const users = useSelector(selectAllUsers)
+  const allUsers = useSelector(originUsers)
 
   const usersStatus = useSelector((state) => state.users.status)
+  const fetchStatus = useSelector((state) => state.users.fetchStatus)
   const error = useSelector((state) => state.users.error)
 
   React.useEffect(() => {
@@ -26,17 +28,29 @@ export default function Users() {
 
     let content
 
-    if (usersStatus === 'loading') {
+    if (fetchStatus === 'loading') {
         content = <Spinner text="Carregando usuários..." />
-    } else if (usersStatus === 'succeeded') {
-        content = <UserTable items={users} onEditClick={(reg) => handleCRUDClick(reg, actionTypes.edit)} onRemoveClick={(reg) => handleCRUDClick(reg, actionTypes.remove)}></UserTable>    
-    } else if (usersStatus === 'failed') {
-        content = <div>{error}</div>
+    } else if (fetchStatus === 'succeeded') {
+        content = <UserTable items={users} onEditClick={(id) => handleCRUDClick(id, actionTypes.edit)} onRemoveClick={(id) => handleCRUDClick(id, actionTypes.remove)}></UserTable>    
+    } else if (fetchStatus === 'failed') {
+        alert(error)
+    }
+
+    if (usersStatus === 'failed' ) {
+        alert(error)
+        dispatch(resetErrorStatus());
     }
 
     const handleSearchBarValueChange = (event) => {
-        if (event.target.value == "") {
+        if (event.target.value === "") {
             dispatch(fetchUsers());
+        } else {
+            const filteredUsers = allUsers.filter((user) => 
+            (user.nome.includes(event.target.value) || 
+            user.email.includes(event.target.value) ||
+            user.matricula.includes(event.target.value)))
+
+            dispatch(setUsers(filteredUsers));
         }
     }
 
@@ -44,9 +58,9 @@ export default function Users() {
     const [modalAction, setModalAction] = React.useState('');
     const [modalItem, setModalItem] = React.useState({});
 
-    const handleCRUDClick = (reg, actionType) => {
-        const userItem = reg
-        ? users.find(objUser => objUser.matricula === reg)
+    const handleCRUDClick = (id, actionType) => {
+        const userItem = id
+        ? users.find(objUser => objUser.id === id)
         : new UserModel();
         openModal(actionType, userItem);
     }
@@ -58,7 +72,11 @@ export default function Users() {
     }
 
     const handleSearchInputChange = (event) => {
-        const searchString = event.target.value;
+        const filteredUsers = allUsers.filter((user) => user.nome.includes(event.target.value) ||
+                                                        user.email.includes(event.target.value) ||
+                                                        user.matricula.includes(event.target.value)
+        )
+        setUsers(filteredUsers);
     }
 
     return (
