@@ -1,56 +1,50 @@
-import { MenuBook, Search } from "@mui/icons-material";
-import { InputAdornment, TextField } from "@mui/material";
+import { Search, Computer, ArrowBack } from "@mui/icons-material";
+import { InputAdornment, TextField, Fab } from "@mui/material";
 import { Box } from "@mui/system";
-import AppTable from "../../components/AppTable";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import React from "react";
-import { ClassConfirmationDialog, actionTypes } from '../../components/ClassConfirmationDialog';
+import AppTable from "../../components/AppTable";
+import { MatriculasModal, actionTypes } from "./MatriculasModal";
+import { Add } from "@mui/icons-material";
+import Matricula from "../../model/Matricula";
 
 import "./Matriculas.css";
 
 export default function Matriculas() {
-  const mockClass = {
-    semester: "5",
-    classId: "6789",
-    studentId: "1345"
-  };
-
-  const titleKey = "semester";
-
-
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [modalAction, setModalAction] = React.useState('');
-  const [modalItem, setModalItem] = React.useState({});
-
   const keysLabels = {
     classId: "classId",
     semesterId: "semesterId",
-
-    // birthday: "Data de nascimento",
-    
   };
 
+  const titleKey = "className";
+
+  const mockMatricula = {
+    semesterId: "5",
+    classId: "6789",
+    className: "Banco de Dados",
+    studentId: "1345",
+  };
+
+  const mockMatriculas = Array(4).fill(mockMatricula);
+
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalAction, setModalAction] = React.useState("");
+  const [modalItem, setModalItem] = React.useState({});
+  const { aluno_id: alunoId } = useParams();
+
   const handleCRUDClick = (id, actionType) => {
-    const classItem = id
-        ? mockClasses.find(objClass => objClass.id === id)
-        : "new Class()";
+    const matriculaItem = id
+      ? mockMatriculas.find((objResource) => objResource.id === id)
+      : new Matricula();
 
-    openModal(actionType, classItem);
-}
+    openModal(actionType, matriculaItem);
+  };
 
-const openModal = (action, itemProps) => {
+  const openModal = (action, itemProps) => {
     setModalAction(action);
     setModalItem(itemProps);
     setModalOpen(true);
-}
-
-const handleSearchInputChange = (event) => {
-    const searchString = event.target.value;
-    // TODO: chamar serviço que filtra a aula.
-}
-
-  const mockClasses = Array(4).fill(mockClass);
-  const { aluno_id: alunoId } = useParams();
+  };
 
   return (
     <Box
@@ -63,14 +57,14 @@ const handleSearchInputChange = (event) => {
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <div class="title">
-          <MenuBook fontSize="large" />
+          <Computer fontSize="large" />
           <Box sx={{ ml: 1 }}>Matriculas Aluno {alunoId}</Box>
         </div>
 
         <Box sx={{ display: "flex", alignItems: "end" }}>
           <TextField
             id="outlined-basic"
-            placeholder="Pesquisar aula"
+            placeholder="Pesquisar matricula"
             variant="filled"
             InputProps={{
               startAdornment: (
@@ -86,13 +80,38 @@ const handleSearchInputChange = (event) => {
         </Box>
       </Box>
 
-      <AppTable items={mockClasses} 
+      <AppTable
+        items={mockMatriculas}
         keysLabels={keysLabels}
         titleKey={titleKey}
-        onEditClick={(id) => handleCRUDClick(id, actionTypes.edit)} 
-        onRemoveClick={(id) => handleCRUDClick(id, actionTypes.remove)}  
-        ></AppTable>
+        onEditClick={(id) => handleCRUDClick(id, actionTypes.edit)}
+        onRemoveClick={(id) => handleCRUDClick(id, actionTypes.remove)}
+      ></AppTable>
+
+      <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+        <Link to={{ pathname: "/alunos" }}>
+          <Fab variant="extended" color="primary" sx={{ minWidth: 150 }}>
+            <ArrowBack />
+            VOLTAR
+          </Fab>
+        </Link>
+        <Fab
+          variant="extended"
+          color="primary"
+          sx={{ minWidth: 150 }}
+          onClick={() => handleCRUDClick(null, actionTypes.create)}
+        >
+          <Add />
+          CRIAR
+        </Fab>
+      </Box>
+
+      <MatriculasModal
+        open={modalOpen}
+        action={modalAction}
+        item={modalItem}
+        toggleModal={(open) => setModalOpen(open)}
+      />
     </Box>
   );
 }
-
