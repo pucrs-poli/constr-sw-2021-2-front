@@ -23,9 +23,8 @@ export default class AppTableItem extends React.Component {
         return (
             <Box
                 sx={{ display: "flex", justifyContent: "space-between", py: 3, px: 2 }}
-                className={`item ${this.props.onClickItem ? "enable_hover" : ""}`}
+                className={`item`}
                 onClick={this.props.onClickItem && this.onClickItem}
-
             >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <div className={`item-title`}>{title}</div>

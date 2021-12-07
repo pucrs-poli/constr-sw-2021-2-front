@@ -28,6 +28,7 @@ export default class AppTable extends React.Component {
           onEditClick={this.onEditClick}
           onRemoveClick={this.onRemoveClick}
           onClickItem={this.onClickItem}
+          enable_hover={this.enable_hover}
         />
       </Box>
     ));

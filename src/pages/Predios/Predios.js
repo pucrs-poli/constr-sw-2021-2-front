@@ -176,7 +176,9 @@ export default function Predios() {
                 action={modalAction}
                 actionType={modalActionName}
                 item={modalItem}
-                toggleModal={(open) => setModalOpen(open)} />
+                toggleModal={(open) => setModalOpen(open)}
+
+            />
 
         </Box >
     );
