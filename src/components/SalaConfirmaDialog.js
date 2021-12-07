@@ -39,32 +39,33 @@ export function SalaConfirmaDialog(props) {
 
     const createEditTemplate = () => (
         <main>
-            <DialogContentText>Continue para {actionTextLC()} a Sala <b>{roomItem.title}</b></DialogContentText>
+            <DialogContentText>Continue para {actionTextLC()} a Sala <b>{roomItem.name}</b></DialogContentText>
             <TextField
                 autoFocus
                 margin="dense"
-                id="classNumber"
-                label="Número Sala"
-                type="number"
-                fullWidth
-                variant="filled"
-                defaultValue={roomItem.classNumber}
-                onChange={(event) => onValueChange(event, 'classNumber')}
-            />
-            <TextField
-                margin="dense"
-                id="classBuilding"
-                label="Sala e Prédio"
+                id="name"
+                label="Nome Sala"
                 type="text"
                 fullWidth
                 variant="filled"
-                defaultValue={roomItem.classBuilding}
-                onChange={(event) => onValueChange(event, 'classBuilding')}
+                defaultValue={roomItem.name}
+                onChange={(event) => onValueChange(event, 'name')}
             />
+            {actionTextLC() === "cadastrar" &&
+                <TextField
+                    margin="dense"
+                    id="roomBuilding"
+                    label="Prédio"
+                    type="text"
+                    fullWidth
+                    variant="filled"
+                    defaultValue={roomItem.classBuilding.id}
+                    onChange={(event) => onValueChange(event, 'classBuilding.id')}
+                />}
             <TextField
                 margin="dense"
                 id="capacity"
-                label="Capacidade"
+                label="Capacidade da Sala"
                 type="number"
                 fullWidth
                 variant="filled"
