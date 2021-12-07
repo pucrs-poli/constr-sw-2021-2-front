@@ -1,6 +1,6 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const acoes = {
     cria: 'Cadastrar',
@@ -8,16 +8,25 @@ export const acoes = {
     remove: 'Excluir'
 }
 
+export let returnedActionObject = {}
+
 export function SalaConfirmaDialog(props) {
     const actionText = props.action;
-    const classroomItem = props.item;
+    const roomItem = props.item;
+
+    const [actionObject, setActionObject] = useState([]);
+
+    useEffect(() => {
+        returnedActionObject = actionObject
+    }, [actionObject])
 
     const actionTextLC = () => (actionText || "").toLowerCase();
 
     const handleConfirmClick = () => {
-        console.log(classroomItem);
+        setActionObject({ actionType: actionText, item: roomItem })
         closeDialog();
     }
+
 
     const handleCancelClick = () => {
         closeDialog();
@@ -25,10 +34,10 @@ export function SalaConfirmaDialog(props) {
 
     const onValueChange = (event, attribute) => {
         const newValue = event.target.value;
-        if (!(attribute in classroomItem)) {
+        if (!(attribute in roomItem)) {
             return;
         }
-        classroomItem[attribute] = newValue;
+        roomItem[attribute] = newValue;
     }
 
     const closeDialog = () => {
@@ -37,7 +46,7 @@ export function SalaConfirmaDialog(props) {
 
     const createEditTemplate = () => (
         <main>
-            <DialogContentText>Continue para {actionTextLC()} a Sala <b>{classroomItem.title}</b></DialogContentText>
+            <DialogContentText>Continue para {actionTextLC()} a Sala <b>{roomItem.title}</b></DialogContentText>
             <TextField
                 autoFocus
                 margin="dense"
@@ -46,7 +55,7 @@ export function SalaConfirmaDialog(props) {
                 type="number"
                 fullWidth
                 variant="filled"
-                defaultValue={classroomItem.classNumber}
+                defaultValue={roomItem.classNumber}
                 onChange={(event) => onValueChange(event, 'classNumber')}
             />
             <TextField
@@ -56,7 +65,7 @@ export function SalaConfirmaDialog(props) {
                 type="text"
                 fullWidth
                 variant="filled"
-                defaultValue={classroomItem.classBuilding}
+                defaultValue={roomItem.classBuilding}
                 onChange={(event) => onValueChange(event, 'classBuilding')}
             />
             <TextField
@@ -66,7 +75,7 @@ export function SalaConfirmaDialog(props) {
                 type="number"
                 fullWidth
                 variant="filled"
-                defaultValue={classroomItem.capacity}
+                defaultValue={roomItem.capacity}
                 onChange={(event) => onValueChange(event, 'capacity')}
             />
         </main>
@@ -74,7 +83,7 @@ export function SalaConfirmaDialog(props) {
 
     const deleteTemplate = () => (
         <main>
-            <DialogContentText>Tem certeza que deseja excluir a Sala <b>{classroomItem.number}</b>?</DialogContentText>
+            <DialogContentText>Tem certeza que deseja excluir a Sala <b>{roomItem.number}</b>?</DialogContentText>
         </main>
     );
 
@@ -91,14 +100,14 @@ export function SalaConfirmaDialog(props) {
     }
 
     const renderSwitch = () => {
-        switch(actionText) {
+        switch (actionText) {
             case acoes.remove:
-              return 'EXCLUIR';
+                return 'EXCLUIR';
             case acoes.cria:
-              return 'CRIAR';
-            default :
-              return 'EDITAR';
-          }
+                return 'CRIAR';
+            default:
+                return 'EDITAR';
+        }
     }
 
     return (
