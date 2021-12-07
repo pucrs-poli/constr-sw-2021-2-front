@@ -11,22 +11,15 @@ export const acoes = {
 export let returnedActionObject = {}
 
 export function SalaConfirmaDialog(props) {
-    const actionText = props.action;
+    const actionText = props.actionType
     const roomItem = props.item;
-
-    const [actionObject, setActionObject] = useState([]);
-
-    useEffect(() => {
-        returnedActionObject = actionObject
-    }, [actionObject])
 
     const actionTextLC = () => (actionText || "").toLowerCase();
 
     const handleConfirmClick = () => {
-        setActionObject({ actionType: actionText, item: roomItem })
+        props.action();
         closeDialog();
     }
-
 
     const handleCancelClick = () => {
         closeDialog();

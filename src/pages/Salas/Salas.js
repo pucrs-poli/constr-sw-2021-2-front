@@ -10,9 +10,15 @@ import Sala from '../../model/Sala';
 
 export default function Salas() {
     const [modalOpen, setModalOpen] = React.useState(false);
-    const [modalAction, setModalAction] = React.useState('');
+    const [modalAction, setModalAction] = React.useState(() => { console.log('lol') });
+    const [modalActionName, setModalActionName] = React.useState('');
     const [modalItem, setModalItem] = React.useState({});
-    const [tableList, setTableList] = useState([]);
+    const [tableList, setTableList] = useState([
+        new Sala('1', '00001001', 'Sala 302 - Prédio 32', '50'),
+        new Sala('2', '00001002', 'Sala 301 - Prédio 40', '50'),
+        new Sala('3', '00001003', 'Sala 200 - Prédio 45', '50'),
+        new Sala('4', '00001004', 'Sala 500 - Prédio 30', '50')
+    ]);
     const [itemIndex, setitemIndex] = React.useState(4);
 
     const keysLabels = {
@@ -22,75 +28,62 @@ export default function Salas() {
 
     const titleKey = "classNumber";
 
-    let mockSalas = [
-        new Sala('1', '00001001', 'Sala 302 - Prédio 32', '50'),
-        new Sala('2', '00001002', 'Sala 301 - Prédio 40', '50'),
-        new Sala('3', '00001003', 'Sala 200 - Prédio 45', '50'),
-        new Sala('4', '00001004', 'Sala 500 - Prédio 30', '50'),
-    ];
-
     useEffect(() => {
-        setTableList(mockSalas)
+        setTableList(tableList)
     }, [])
 
 
     const handleCRUDClick = (id, actionType) => {
         const SalaItem = id
-            ? mockSalas.find(objSala => objSala.id === id)
+            ? tableList.find(objSala => objSala.id === id)
             : new Sala();
-        console.log(SalaItem);
 
-        openModal(actionType, SalaItem);
-    }
-
-    const openModal = (action, itemProps) => {
-        setModalAction(action);
-        setModalItem(itemProps);
-        setModalOpen(true);
-    }
-
-    useEffect(() => {
-        const action = returnedActionObject.actionType
-        switch (action) {
+        let action = undefined;
+        switch (actionType) {
             case 'Editar':
-                handleItemEditar(returnedActionObject.item)
+                action = () => { handleItemEditar(SalaItem) }
                 break;
             case 'Cadastrar':
-                handleItemSalvar(returnedActionObject.item)
+                action = () => { handleItemSalvar(SalaItem) }
                 break;
             case 'Excluir':
-                handleItemExcluir(returnedActionObject.item)
+                action = () => { handleItemExcluir(SalaItem) }
                 break;
             default:
                 console.log("Invalid");
         }
-    }, [modalOpen])
+
+        openModal(action, SalaItem, actionType);
+    }
+
+    const openModal = (action, itemProps, actionName) => {
+        setModalAction(() => action);
+        setModalItem(itemProps);
+        setModalOpen(true);
+        setModalActionName(actionName)
+    }
 
     const handleItemEditar = (item) => {
-        for (let i = 0; i < mockSalas.length; i++) {
-            const incommingItem = mockSalas[i]
+        for (let i = 0; i < tableList.length; i++) {
+            const incommingItem = tableList[i]
             if (incommingItem.id === item.id) {
-                mockSalas.splice(i, 1, item)
+                tableList.splice(i, 1, item)
             }
         }
-        setTableList(mockSalas)
+        setTableList(tableList)
     }
 
     const handleItemSalvar = (item) => {
         const id = `${itemIndex}`
         const newItem = new Sala(id, item.classNumber, item.classBuilding, item.capacity)
         setitemIndex((itemIndex + 1))
-        mockSalas.push(newItem)
-        setTableList(mockSalas)
+        tableList.push(newItem)
+        setTableList(tableList)
     }
 
     const handleItemExcluir = (item) => {
-        console.log(item);
-        const newArr = mockSalas.filter((el) => el.id !== item.id);
-        mockSalas = newArr;
-        console.log(newArr);
+        const newArr = tableList.filter((el) => el.id !== item.id);
         setTableList(newArr);
-        console.log('hit')
     }
 
     return (
@@ -148,8 +141,10 @@ export default function Salas() {
             <SalaConfirmaDialog
                 open={modalOpen}
                 action={modalAction}
+                actionType={modalActionName}
                 item={modalItem}
                 toggleModal={(open) => setModalOpen(open)} />
+
         </Box >
     );
 }
