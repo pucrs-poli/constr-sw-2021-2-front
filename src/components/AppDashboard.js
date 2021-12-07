@@ -13,7 +13,7 @@ export default function AppDashboard() {
                 </Grid>
 
                 <Grid item>
-                    <AppCard name="Alunos" description="Descreva o card aqui" image={imgAulas} routeTo="alunos" />
+                    <AppCard name="Alunos" description="Aqui você encontra Alunos e matriculas" image={imgAulas} routeTo="alunos" />
                 </Grid>
 
                 <Grid item>
