@@ -23,7 +23,8 @@ export function MatriculasModal(props) {
         action: actionText,
         item: resourceTypeItem,
         actionFn,
-        courses,
+        disciplinas,
+        turmas,
     } = props;
 
     const [item, setItem] = React.useState({});
@@ -31,10 +32,10 @@ export function MatriculasModal(props) {
     const [selectedClass, setSelectedClass] = React.useState(null);
 
     React.useEffect(() => {
-        console.log("resourceTypeItem", resourceTypeItem);
+        console.log(props);
         setItem(resourceTypeItem);
-        setSelectedCourse(resourceTypeItem?.course?.id);
-        setSelectedClass(resourceTypeItem?.classId)
+        setSelectedCourse(resourceTypeItem?.disciplina?._id);
+        setSelectedClass(resourceTypeItem?.classId);
     }, [resourceTypeItem, modalOpen]);
 
     const actionTextLC = () => (actionText || "").toLowerCase();
@@ -70,7 +71,7 @@ export function MatriculasModal(props) {
         console.log(newValue);
         setSelectedClass(newValue);
         setItem({ ...item, classId: newValue });
-    }
+    };
 
     const closeDialog = () => {
         props.toggleModal(false);
@@ -87,7 +88,6 @@ export function MatriculasModal(props) {
                 label="Semestre"
                 type="text"
                 fullWidth
-                // sx={{ width: "20%", marginRight: "5%" }}
                 variant="filled"
                 defaultValue={item.semester}
                 onChange={(event) => onValueChange(event, "semester")}
@@ -99,14 +99,13 @@ export function MatriculasModal(props) {
                 label="Disciplina"
                 type="text"
                 fullWidth
-                // sx={{ width: "65%", marginRight: "5%" }}
                 variant="filled"
                 value={selectedCourse}
                 onChange={handleCourseChange}
             >
-                {courses.map((c) => (
-                    <MenuItem key={c.id} value={c.id}>
-                        {c.name}
+                {disciplinas.map((c) => (
+                    <MenuItem key={c._id} value={c._id}>
+                        {c.nome}
                     </MenuItem>
                 ))}
             </TextField>
@@ -117,18 +116,17 @@ export function MatriculasModal(props) {
                 label="Turma"
                 type="text"
                 fullWidth
-                // sx={{ width: "15%" }}
                 variant="filled"
                 value={selectedClass}
                 onChange={handleClassChange}
             >
-                {selectedCourse && courses.find((c) => c.id === selectedCourse)
-                    ? courses.find((c) => c.id === selectedCourse).classes.map((c) => (
-                          <MenuItem key={c.id} value={c.id}>
-                              {c.name}
-                          </MenuItem>
-                      ))
-                    : []}
+                {turmas
+                    .filter((t) => t.disciplina === selectedCourse)
+                    .map((c) => (
+                        <MenuItem key={c._id} value={c._id}>
+                            {`${c.numero} (${c.horario})`}
+                        </MenuItem>
+                    ))}
             </TextField>
         </main>
     );

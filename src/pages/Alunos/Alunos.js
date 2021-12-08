@@ -10,7 +10,7 @@ import Aluno from "../../model/Aluno";
 import "./Alunos.css";
 
 export default function Alunos() {
-    const rootApi = "http://localhost:3000/api";
+    const g2ApiUrl = "http://localhost:3332/api";
 
     const keysLabels = {
         email: "E-mail",
@@ -20,27 +20,20 @@ export default function Alunos() {
     };
     const titleKey = "name";
 
-    const mockAluno = {
-        id: "1345",
-        name: "João Severo",
-        email: "potato@potate.com",
-        birthday: "2019-08-21T00:00:00.000Z",
-        phone: "+55(51)99455-6722",
-        link: "/alunos/1345/matriculas",
-    };
-    const mockAlunos = Array(4).fill(mockAluno);
-
     const [modalOpen, setModalOpen] = React.useState(false);
     const [modalAction, setModalAction] = React.useState("");
     const [modalItem, setModalItem] = React.useState({});
+
     const [alunos, setAlunos] = React.useState([]);
+
+    const [search, setSearch] = React.useState("");
 
     React.useEffect(() => {
         fetchAlunos();
     }, []);
 
     const fetchAlunos = async () => {
-        const { data } = await axios.get(`${rootApi}/students`);
+        const { data } = await axios.get(`${g2ApiUrl}/students`);
         const alunos = data.map((a) => ({
             id: a._id,
             ...a,
@@ -52,15 +45,18 @@ export default function Alunos() {
     const editAluno = async (actionType, aluno = {}) => {
         switch (actionType) {
             case actionTypes.create:
-                await axios.post(`${rootApi}/students`, aluno);
+                await axios.post(`${g2ApiUrl}/students`, aluno);
                 break;
             case actionTypes.edit:
-                aluno.id &&
-                    (await axios.put(`${rootApi}/students/${aluno.id}`, aluno));
+                aluno._id &&
+                    (await axios.put(
+                        `${g2ApiUrl}/students/${aluno._id}`,
+                        aluno
+                    ));
                 break;
             case actionTypes.remove:
-                aluno.id &&
-                    (await axios.delete(`${rootApi}/students/${aluno.id}`));
+                aluno._id &&
+                    (await axios.delete(`${g2ApiUrl}/students/${aluno._id}`));
                 break;
             default:
                 break;
@@ -105,6 +101,8 @@ export default function Alunos() {
                         id="outlined-basic"
                         placeholder="Pesquisar Aluno"
                         variant="filled"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -120,7 +118,11 @@ export default function Alunos() {
             </Box>
 
             <AppTable
-                items={alunos}
+                items={alunos.filter(
+                    (a) =>
+                        !search ||
+                        a.name.toLowerCase().includes(search.toLowerCase())
+                )}
                 keysLabels={keysLabels}
                 titleKey={titleKey}
                 onEditClick={(id) => handleCRUDClick(id, actionTypes.edit)}
@@ -149,71 +151,3 @@ export default function Alunos() {
         </Box>
     );
 }
-
-//import { MenuBook, Search } from "@mui/icons-material";
-//import { InputAdornment, TextField } from "@mui/material";
-//import { Box } from "@mui/system";
-//import AppTable from "../../components/AppTable";
-//
-//import "./Alunos.css";
-//
-//export default function Alunos() {
-//  const keysLabels = {
-//    email: "E-mail",
-//    // birthday: "Data de nascimento",
-//    phone: "Telefone",
-//  };
-//  const titleKey = "name";
-//
-//  const mockClass = {
-//    id: "1345",
-//    name: "João Severo",
-//    email: "potato@potate.com",
-//    birthday: "2019-08-21T00:00:00.000Z",
-//    phone: "+55(51)99455-6722",
-//  };
-//
-//  const mockClasses = Array(4).fill(mockClass);
-//
-//  return (
-//    <Box
-//      sx={{
-//        mx: { lg: 24, xl: 36 },
-//        mt: 4,
-//        display: "flex",
-//        flexDirection: "column",
-//      }}
-//    >
-//      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-//        <div class="title">
-//          <MenuBook fontSize="large" />
-//          <Box sx={{ ml: 1 }}>Alunos</Box>
-//        </div>
-//
-//        <Box sx={{ display: "flex", alignItems: "end" }}>
-//          <TextField
-//            id="outlined-basic"
-//            placeholder="Pesquisar aluno"
-//            variant="filled"
-//            InputProps={{
-//              startAdornment: (
-//                <InputAdornment position="start">
-//                  <Search />
-//                </InputAdornment>
-//              ),
-//              style: {
-//                backgroundColor: "white",
-//              },
-//            }}
-//          />
-//        </Box>
-//      </Box>
-//
-//      <AppTable
-//        items={mockClasses}
-//        keysLabels={keysLabels}
-//        titleKey={titleKey}
-//      ></AppTable>
-//    </Box>
-//  );
-//}

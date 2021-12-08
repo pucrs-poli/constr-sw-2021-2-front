@@ -11,7 +11,8 @@ import Matricula from "../../model/Matricula";
 import "./Matriculas.css";
 
 export default function Matriculas() {
-    const rootApi = "http://localhost:3000/api";
+    const g2ApiUrl = "http://localhost:3332/api";
+    const g5ApiUrl = "http://localhost:3333";
 
     const keysLabels = {
         semester: "Semestre",
@@ -19,94 +20,113 @@ export default function Matriculas() {
     };
     const titleKey = "className";
 
-    const mockMatricula = {
-        semesterId: "5",
-        classId: "6789",
-        className: "Banco de Dados",
-        studentId: "1345",
-    };
-    const mockMatriculas = Array(4).fill(mockMatricula);
-
-    const mockCourses = [
-        {
-            id: "1",
-            name: "Fundamentos de Programação",
-            classes: [{ id: "61aff870c2fc22a3decab2e1", name: "123" }],
-        },
-        {
-            id: "2",
-            name: "Algoritmos e Estruturas de Dados",
-            classes: [{ id: "61aff870c2fc22a3decab2e2", name: "124" }],
-        },
-        {
-            id: "3",
-            name: "AGES I",
-            classes: [{ id: "61aff870c2fc22a3decab2e3", name: "125" }],
-        },
-    ];
+    const { aluno_id: alunoId } = useParams();
 
     const [modalOpen, setModalOpen] = React.useState(false);
     const [modalAction, setModalAction] = React.useState("");
     const [modalItem, setModalItem] = React.useState({});
+
     const [aluno, setAluno] = React.useState({});
     const [matriculas, setMatriculas] = React.useState([]);
-    const { aluno_id: alunoId } = useParams();
+
+    const [disciplinas, setDisciplinas] = React.useState([]);
+    const [turmas, setTurmas] = React.useState([]);
+
+    const [loaded, setLoaded] = React.useState(false);
+    const [search, setSearch] = React.useState("");
 
     React.useEffect(() => {
-        fetchMatriculas();
-        getAluno(alunoId);
-    }, []);
+        async function fetchData() {
+            await Promise.all([fetchTurmas(), fetchDisciplinas()]);
+            setLoaded(true);
+            fetchMatriculas();
+            getAluno(alunoId);
+        }
+        fetchData();
+    }, [alunoId, loaded]);
 
     const fetchMatriculas = async () => {
+        if (!loaded) return;
+
         const { data } = await axios.get(
-            `${rootApi}/students/${alunoId}/enrolls`
+            `${g2ApiUrl}/students/${alunoId}/enrolls`
         );
         const matriculas = await Promise.all(
             data.map(async (d) => ({
                 id: d._id,
                 ...d,
-                course: await getDisciplina(d.classId),
+                disciplina: await getDisciplina(d.classId),
             }))
         );
+        console.log({ matriculas, disciplinas, turmas });
         setMatriculas(
-            matriculas.map((m) => ({
-                ...m,
-                courseName: m.course?.name,
-                className: (
-                    m.course.classes?.find((c) => c.id === m.classId) || {}
-                ).name,
-            }))
+            matriculas.map((m) => {
+                const turma = turmas.find((t) => t._id === m.classId);
+                return {
+                    ...m,
+                    courseName: m.disciplina?.nome,
+                    className:
+                        turma && `Turma ${turma.numero} (${turma.horario})`,
+                };
+            })
         );
     };
 
+    const fetchDisciplinas = async () => {
+        const { data } = await axios.get(`${g5ApiUrl}/disciplina`);
+        setDisciplinas(data);
+    };
+
+    const fetchTurmas = async () => {
+        const { data } = await axios.get(`${g5ApiUrl}/turma`);
+        setTurmas(data);
+    };
+
     const getAluno = async (id) => {
-        const { data } = await axios.get(`${rootApi}/students/${id}`);
+        const { data } = await axios.get(`${g2ApiUrl}/students/${id}`);
         setAluno(data);
-    }
+    };
 
     const getDisciplina = async (idTurma) => {
-        return mockCourses.find((c) => c.classes.find((t) => t.id === idTurma));
+        // Consultando todas as turmas porque, no momento, não há uma rota para retornar
+        // as turmas de uma disciplina específica
+        // const { data: turmas } = await axios.get(`${g5ApiUrl}/turma`);
+        // console.log({ classData: turmas });
+        if (!turmas || !turmas.length) return null;
+
+        const turma = turmas.find((t) => t._id === idTurma);
+        console.log({ turma });
+        if (!turma) return null;
+
+        const { data: disciplina } = await axios.get(
+            `${g5ApiUrl}/disciplina/${turma.disciplina}`
+        );
+        return {
+            id: disciplina._id,
+            ...disciplina,
+            turmas: turmas.filter((t) => t.disciplina === turma.disciplina),
+        };
     };
 
     const editMatricula = async (actionType, matricula = {}) => {
         switch (actionType) {
             case actionTypes.create:
                 await axios.post(
-                    `${rootApi}/students/${alunoId}/enrolls`,
+                    `${g2ApiUrl}/students/${alunoId}/enrolls`,
                     matricula
                 );
                 break;
             case actionTypes.edit:
-                matricula.id &&
+                matricula._id &&
                     (await axios.put(
-                        `${rootApi}/students/${alunoId}/enrolls/${matricula.id}`,
+                        `${g2ApiUrl}/students/${alunoId}/enrolls/${matricula._id}`,
                         matricula
                     ));
                 break;
             case actionTypes.remove:
-                matricula.id &&
+                matricula._id &&
                     (await axios.delete(
-                        `${rootApi}/students/${alunoId}/enrolls/${matricula.id}`
+                        `${g2ApiUrl}/students/${alunoId}/enrolls/${matricula._id}`
                     ));
                 break;
             default:
@@ -151,6 +171,8 @@ export default function Matriculas() {
                         id="outlined-basic"
                         placeholder="Pesquisar matricula"
                         variant="filled"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -166,7 +188,14 @@ export default function Matriculas() {
             </Box>
 
             <AppTable
-                items={matriculas}
+                items={matriculas.filter(
+                    (m) =>
+                        !search ||
+                        m.courseName
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                        m.className.toLowerCase().includes(search.toLowerCase())
+                )}
                 keysLabels={keysLabels}
                 titleKey={titleKey}
                 onEditClick={(id) => handleCRUDClick(id, actionTypes.edit)}
@@ -201,7 +230,8 @@ export default function Matriculas() {
                 item={modalItem}
                 toggleModal={(open) => setModalOpen(open)}
                 actionFn={editMatricula}
-                courses={mockCourses}
+                disciplinas={disciplinas}
+                turmas={turmas}
             />
         </Box>
     );
