@@ -1,8 +1,8 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
-import { DesktopDatePicker, LocalizationProvider, MuiPickersAdapterContext } from '@mui/lab';
 import { Box } from '@mui/system';
 import moment from 'moment';
 import React from 'react';
+import ClassesService from '../service/ClassesService';
 
 export const actionTypes = {
     create: 'Cadastrar',
@@ -11,14 +11,54 @@ export const actionTypes = {
 }
 
 export function ClassConfirmationDialog(props) {
+    const classesService = new ClassesService();
     const actionText = props.action;
     const classItem = props.item;
 
     const actionTextLC = () => (actionText || "").toLowerCase();
 
     const handleConfirmClick = () => {
-        console.log(classItem);
+        switch (actionText) {
+            case actionTypes.create:
+                createClass();
+                break;
+            case actionTypes.edit:
+                updateClass();
+                break;
+            case actionTypes.remove:
+                deleteClass();
+                break;
+            default:
+                return;
+        }
         closeDialog();
+    }
+
+    const createClass = async () => {
+        const objClass = {
+            numTurma: classItem.numTurma,
+            disciplina: classItem.disciplina,
+            professor: classItem.professor,
+            reserva: classItem.reserva,
+        }
+        const newClass = await classesService.createClass(objClass);
+        props.onCreated(newClass);
+    }
+
+    const updateClass = () => {
+        const objClass = {
+            id: classItem.id,
+            numTurma: classItem.numTurma,
+            disciplina: classItem.disciplina,
+            professor: classItem.professor,
+            reserva: classItem.reserva
+        }
+        classesService.editClass(objClass);
+    }
+
+    const deleteClass = async () => {
+        const id = await classesService.deleteClassById(classItem.id);
+        props.onDeleted(id);
     }
 
     const handleCancelClick = () => {
@@ -58,7 +98,7 @@ export function ClassConfirmationDialog(props) {
                 fullWidth
                 variant="filled"
                 defaultValue={classItem.numTurma}
-                onChange={(event) => onValueChange(event, 'numTurma')}
+                onChange={(event) => onValueChange(event.target.value, 'numTurma')}
             />
             <TextField
                 margin="dense"
