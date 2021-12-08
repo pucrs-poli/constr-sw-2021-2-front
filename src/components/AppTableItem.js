@@ -14,28 +14,32 @@ export default class AppTableItem extends React.Component {
     onRemoveClick = () => {
         this.props.onRemoveClick(this.props.id);
     }
+    onClickItem = () => {
+        this.props.onClickItem(this.props.id);
+    }
 
     render() {
         const { title, keysLabels, fields } = this.props;
         return (
             <Box
                 sx={{ display: "flex", justifyContent: "space-between", py: 3, px: 2 }}
-                className="item"
+                className={`item`}
+                onClick={this.props.onClickItem && this.onClickItem}
             >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <div className={`item-title`}>{title}</div>
                     {Object.entries(fields)
                         .filter(([key]) => keysLabels[key])
                         .map(([key, value], index) =>
-                            key === 'link' ? (
-                                <Link to={{pathname: value}}>
+                            key == 'link' ? (
+                                <Link to={{ pathname: value }}>
                                     <div className={`item-resources link`}>{`${keysLabels[key]}`}</div>
                                 </Link>
                             ) : (
                                 <div
                                     key={index}
                                     className={`item-resources`}
-                                >{`${keysLabels[key]}: ${value}`}</div>
+                                >{`${keysLabels[key].text || keysLabels[key]}: ${keysLabels[key].value ? keysLabels[key].value(value) : value}`}</div>
                             )
                         )
                     }

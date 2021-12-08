@@ -6,9 +6,13 @@ import ResourceTypes from './pages/ResourceTypes/ResourceTypes';
 import Resources from './pages/Resources/Resources';
 import Alunos from './pages/Alunos/Alunos';
 import Matriculas from './pages/Matriculas/Matriculas';
+import Users from './pages/Users/Users';
 import AppToolbar from "./components/AppToolbar";
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Box } from '@mui/system';
+import Salas from './pages/Salas/Salas';
+import Predio_Salas from './pages/Predio_Salas/Predio_Salas';
+import Predios from './pages/Predios/Predios';
 
 function App() {
   const theme = createTheme({
@@ -37,6 +41,10 @@ function App() {
             <Route path='/recursos/:tipo_recurso' element={<Resources />} />
             <Route path='/alunos' element={<Alunos />} />
             <Route path='/alunos/:aluno_id/matriculas' element={<Matriculas />} />
+            <Route path='/usuarios' element={<Users />} />
+            <Route path='/salas' element={<Salas />} />
+            <Route path='/predios' element={<Predios />} />
+            <Route path='/sala_predios' element={<Predio_Salas />} />
           </Routes>
         </Box>
       </Router>

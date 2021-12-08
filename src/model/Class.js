@@ -1,8 +1,10 @@
 export default class Class {
-    constructor(id, title = '', group = '', resources = '') {
-        this.id = id;
-        this.title = title;
-        this.group = group;
-        this.resources = resources;
+    constructor({ _id, numTurma = '', disciplina = '', professor = '', reserva = null, date = new Date().getTime() }) {
+        this.id = _id;
+        this.date = date;
+        this.numTurma = numTurma;
+        this.disciplina = disciplina;
+        this.professor = professor;
+        this.reserva = reserva;
     }
 }
