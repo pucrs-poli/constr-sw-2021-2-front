@@ -36,11 +36,11 @@ export default class AppTableItem extends React.Component {
                                     <div className={`item-resources link`}>{`${keysLabels[key]}`}</div>
                                 </Link>
                             ) : (
-                                    <div
-                                        key={index}
-                                        className={`item-resources`}
-                                    >{`${keysLabels[key]}: ${value}`}</div>
-                                )
+                                <div
+                                    key={index}
+                                    className={`item-resources`}
+                                >{`${keysLabels[key].text || keysLabels[key]}: ${keysLabels[key].value ? keysLabels[key].value(value) : value}`}</div>
+                            )
                         )
                     }
                 </Box>
