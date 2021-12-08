@@ -14,13 +14,17 @@ export default class AppTableItem extends React.Component {
     onRemoveClick = () => {
         this.props.onRemoveClick(this.props.id);
     }
+    onClickItem = () => {
+        this.props.onClickItem(this.props.id);
+    }
 
     render() {
         const { title, keysLabels, fields } = this.props;
         return (
             <Box
                 sx={{ display: "flex", justifyContent: "space-between", py: 3, px: 2 }}
-                className="item"
+                className={`item`}
+                onClick={this.props.onClickItem && this.onClickItem}
             >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <div className={`item-title`}>{title}</div>
