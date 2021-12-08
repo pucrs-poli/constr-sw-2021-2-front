@@ -113,14 +113,16 @@ export default function Matriculas() {
             case actionTypes.create:
                 await axios.post(
                     `${g2ApiUrl}/students/${alunoId}/enrolls`,
-                    matricula
+                    matricula,
+                    { headers: { Authorization: "1" } } // A API G2 está verificando se existe algo em Authorization
                 );
                 break;
             case actionTypes.edit:
                 matricula._id &&
                     (await axios.put(
                         `${g2ApiUrl}/students/${alunoId}/enrolls/${matricula._id}`,
-                        matricula
+                        matricula,
+                        { headers: { Authorization: "1" } }
                     ));
                 break;
             case actionTypes.remove:
