@@ -1,7 +1,8 @@
-export default class Aluno {
-    constructor(id, name = '', description = '' , email = 'aa@gmail.com') {
+export default class Matricula {
+    constructor(id, semester = '', classId = '', course = '') {
         this.id = id;
-        this.name = name;
-        this.email = email;
+        this.semester = semester;
+        this.classId = classId;
+        this.course = course;
     }
 }

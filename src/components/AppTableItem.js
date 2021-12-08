@@ -27,7 +27,7 @@ export default class AppTableItem extends React.Component {
                     {Object.entries(fields)
                         .filter(([key]) => keysLabels[key])
                         .map(([key, value], index) =>
-                            key == 'link' ? (
+                            key === 'link' ? (
                                 <Link to={{pathname: value}}>
                                     <div className={`item-resources link`}>{`${keysLabels[key]}`}</div>
                                 </Link>

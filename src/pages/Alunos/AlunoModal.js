@@ -1,43 +1,71 @@
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
-import { Box } from '@mui/system';
-import React from 'react';
+import React from "react";
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField,
+    Button,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import ReactInputMask from "react-input-mask";
 
 export const actionTypes = {
-    create: 'Cadastrar',
-    edit: 'Editar',
-    remove: 'Excluir'
-}
+    create: "Cadastrar",
+    edit: "Editar",
+    remove: "Excluir",
+};
 
 export function AlunosModal(props) {
-    const actionText = props.action;
-    const resourceTypeItem = props.item;
+    const {
+        open: modalOpen,
+        action: actionText,
+        item: resourceTypeItem,
+        actionFn,
+    } = props;
+
+    const [item, setItem] = React.useState({});
+
+    React.useEffect(() => {
+        setItem({
+            ...resourceTypeItem,
+            birthday: resourceTypeItem.birthday
+                ? resourceTypeItem.birthday.split("T")[0]
+                : null,
+        });
+    }, [resourceTypeItem, modalOpen]);
 
     const actionTextLC = () => (actionText || "").toLowerCase();
 
-    const handleConfirmClick = () => {
-        console.log(resourceTypeItem);
+    const handleConfirmClick = async () => {
+        console.log(item);
+        await actionFn(actionText, item);
         closeDialog();
-    }
+    };
 
     const handleCancelClick = () => {
         closeDialog();
-    }
+    };
 
     const onValueChange = (event, attribute) => {
         const newValue = event.target.value;
-        if (!(attribute in resourceTypeItem)) {
+        if (!(attribute in item)) {
             return;
         }
-        resourceTypeItem[attribute] = newValue;
-    }
+        setItem({ ...item, [attribute]: newValue });
+        console.log({ item });
+    };
 
     const closeDialog = () => {
         props.toggleModal(false);
-    }
+    };
 
     const createEditTemplate = () => (
         <main>
-            <DialogContentText>Continue para {actionTextLC()} o aluno <b>{resourceTypeItem.title}</b></DialogContentText>
+            <DialogContentText>
+                Continue para {actionTextLC()} o aluno <b>{item.title}</b>
+            </DialogContentText>
             <TextField
                 margin="dense"
                 id="resourceName"
@@ -45,8 +73,8 @@ export function AlunosModal(props) {
                 type="text"
                 fullWidth
                 variant="filled"
-                defaultValue={resourceTypeItem.name}
-                onChange={(event) => onValueChange(event, 'name')}
+                defaultValue={item.name}
+                onChange={(event) => onValueChange(event, "name")}
             />
             <TextField
                 margin="dense"
@@ -55,26 +83,43 @@ export function AlunosModal(props) {
                 type="text"
                 fullWidth
                 variant="filled"
-                defaultValue={resourceTypeItem.description}
-                onChange={(event) => onValueChange(event, 'description')}
+                defaultValue={item.email}
+                onChange={(event) => onValueChange(event, "email")}
             />
+            <ReactInputMask
+                mask="+55(99)99999-9999"
+                value={item.phone}
+                onChange={(event) => onValueChange(event, "phone")}
+            >
+                {() => (
+                    <TextField
+                        margin="dense"
+                        id="phone"
+                        label="Telefone"
+                        type="text"
+                        variant="filled"
+                        sx={{ width: "45%" }}
+                    />
+                )}
+            </ReactInputMask>
             <TextField
-                disabled
                 margin="dense"
-                id="phone"
-                label="Telefone"
-                type="text"
-                fullWidth
+                id="birthday"
+                label="Data de nascimento"
+                type="date"
                 variant="filled"
-                defaultValue={resourceTypeItem.resourceType}
-                onChange={(event) => onValueChange(event, 'resourceType')}
+                defaultValue={item.birthday}
+                sx={{ marginLeft: "10%", width: "45%" }}
+                onChange={(event) => onValueChange(event, "birthday")}
             />
         </main>
     );
 
     const deleteTemplate = () => (
         <main>
-            <DialogContentText>Tem certeza que deseja excluir o aluno <b>{resourceTypeItem.name}</b>?</DialogContentText>
+            <DialogContentText>
+                Tem certeza que deseja excluir o aluno <b>{item.name}</b>?
+            </DialogContentText>
         </main>
     );
 
@@ -86,22 +131,33 @@ export function AlunosModal(props) {
             case actionTypes.remove:
                 return deleteTemplate();
             default:
-                return ''
+                return "";
         }
-    }
+    };
 
     return (
+        // <LocalizationProvider dateAdapter={DateAdapter}>
         <Dialog open={props.open}>
             <DialogTitle>{`${actionText} Aluno`}</DialogTitle>
-            <DialogContent>
-                {getTemplate()}
-            </DialogContent>
+            <DialogContent>{getTemplate()}</DialogContent>
             <DialogActions>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant="text" color="secondary" sx={{ mr: 1 }} onClick={handleCancelClick}>CANCELAR</Button>
-                    <Button variant="text" onClick={handleConfirmClick}>{actionText === actionTypes.remove ? 'EXCLUIR' : 'SALVAR'}</Button>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                        variant="text"
+                        color="secondary"
+                        sx={{ mr: 1 }}
+                        onClick={handleCancelClick}
+                    >
+                        CANCELAR
+                    </Button>
+                    <Button variant="text" onClick={handleConfirmClick}>
+                        {actionText === actionTypes.remove
+                            ? "EXCLUIR"
+                            : "SALVAR"}
+                    </Button>
                 </Box>
             </DialogActions>
         </Dialog>
+        // </LocalizationProvider>
     );
 }
