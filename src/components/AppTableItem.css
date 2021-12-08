@@ -12,9 +12,17 @@
   font-weight: 600;
 }
 
-.item-group,
+.item-numTurma,
 .item-resources {
   font-size: 1rem;
   font-weight: 400;
   color: #6d8a96;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+.enable_hover:hover {
+  cursor: pointer;
 }

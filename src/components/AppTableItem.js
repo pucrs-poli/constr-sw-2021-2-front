@@ -1,23 +1,54 @@
 import { Edit, Delete } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 import React from "react";
-import './AppTableItem.css';
+import "./AppTableItem.css";
 
 export default class AppTableItem extends React.Component {
+
+    onEditClick = () => {
+        this.props.onEditClick(this.props.id);
+    }
+
+    onRemoveClick = () => {
+        this.props.onRemoveClick(this.props.id);
+    }
+    onClickItem = () => {
+        this.props.onClickItem(this.props.id);
+    }
+
     render() {
+        const { title, keysLabels, fields } = this.props;
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 3, px: 2 }} className="item">
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <div class="item-title">{this.props.title}</div>
-                    <div class="item-group">{this.props.group}</div>
-                    <div class="item-resources">{this.props.resources}</div>
+            <Box
+                sx={{ display: "flex", justifyContent: "space-between", py: 3, px: 2 }}
+                className={`item`}
+                onClick={this.props.onClickItem && this.onClickItem}
+            >
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <div className={`item-title`}>{title}</div>
+                    {Object.entries(fields)
+                        .filter(([key]) => keysLabels[key])
+                        .map(([key, value], index) =>
+                            key == 'link' ? (
+                                <Link to={{ pathname: value }}>
+                                    <div className={`item-resources link`}>{`${keysLabels[key]}`}</div>
+                                </Link>
+                            ) : (
+                                <div
+                                    key={index}
+                                    className={`item-resources`}
+                                >{`${keysLabels[key].text || keysLabels[key]}: ${keysLabels[key].value ? keysLabels[key].value(value) : value}`}</div>
+                            )
+                        )
+                    }
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: "center" }}>
-                    <IconButton>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton onClick={this.onEditClick}>
                         <Edit />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={this.onRemoveClick}>
                         <Delete color="error" />
                     </IconButton>
                 </Box>

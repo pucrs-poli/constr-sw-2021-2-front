@@ -3,6 +3,8 @@ import { Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import AppCard from "./AppCard";
 import imgAulas from '../assets/aula.png';
+import imgSalas from '../assets/sala.png';
+import imgPredios from '../assets/predio.png';
 
 export default function AppDashboard() {
     return (
@@ -17,6 +19,10 @@ export default function AppDashboard() {
                 </Grid>
 
                 <Grid item>
+                    <AppCard name="Recursos" description="Aqui você encontra os tipos de recursos e recursos" image={imgAulas} routeTo="tipos_recursos" />
+                </Grid>
+
+                <Grid item>
                     <AppCard name="Exemplo" description="Descreva o card aqui" image={imgAulas} routeTo="tela1" />
                 </Grid>
 
@@ -26,6 +32,14 @@ export default function AppDashboard() {
 
                 <Grid item>
                     <AppCard name="Usuários" description="Aqui você encontra os usuários" image={imgAulas} routeTo="usuarios" />
+                </Grid> 
+                
+                <Grid item>
+                    <AppCard name="Predios" description="Aqui encontra os Predios" image={imgPredios} routeTo="predios" />
+                </Grid>
+
+                <Grid item>
+                    <AppCard name="Salas" description="Aqui encontra as Salas" image={imgSalas} routeTo="salas" />
                 </Grid>
             </Grid>
         </Box>

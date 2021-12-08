@@ -8,10 +8,13 @@ import "./Matriculas.css";
 
 export default function Matriculas() {
   const mockClass = {
-    title: "Construção de Software",
-    group: "T102",
-    resources: "Notebook #32",
+    semester: "5",
+    classId: "6789",
+    studentId: "1345"
   };
+
+
+
   const mockClasses = Array(4).fill(mockClass);
   const { aluno_id: alunoId } = useParams();
 
