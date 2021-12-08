@@ -16,7 +16,7 @@ export default class AppTableItem extends React.Component {
 
     render() {
         const roles = this.props.roles.map(item => (
-            <Box className="item-roles">
+            <Box className={`item-roles ${item}`}>
                 <p>{item}</p>
             </Box>
         ));
@@ -24,10 +24,10 @@ export default class AppTableItem extends React.Component {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 3, px: 2 }} className="item">
                 <Box sx={{ display: 'flex', flexDirection: 'column'}}>
                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                        <div class="item-name">{this.props.name}</div>
-                        <div class="item-reg">{this.props.reg}</div>
+                        <div className="item-name">{this.props.name}</div>
+                        <div className="item-reg">{this.props.reg}</div>
                     </Box>
-                    <div class="item-email">{this.props.email}</div>
+                    <div className="item-email">{this.props.email}</div>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: "center" }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row'}}>

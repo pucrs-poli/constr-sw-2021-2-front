@@ -130,13 +130,13 @@ export function UserModal(props) {
         <div>
             <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px", marginBottom: "10px"}}> 
                 <TextField 
-                    id="standard-basic"
+                    id="standard-basic matricula"
                     onChange={(event) => onValueChange(event, 'matricula')}
                     defaultValue={userItem.matricula}
                     label="Matrícula" variant="standard"
                 />
                 <TextField 
-                    id="standard-basic"
+                    id="standard-basic login"
                     onChange={(event) => onValueChange(event, 'login')} 
                     defaultValue={userItem.login}
                     label="Nome de Usuário" 
@@ -145,13 +145,13 @@ export function UserModal(props) {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px", marginBottom: "10px" }}> 
                 <TextField 
-                    id="standard-basic"
+                    id="standard-basic nome"
                     onChange={(event) => onValueChange(event, 'nome')} 
                     defaultValue={userItem.nome} 
                     label="Nome de Perfil" 
                     variant="standard"/>
                 <TextField 
-                    id="standard-basic"
+                    id="standard-basic email"
                     onChange={(event) => onValueChange(event, 'email')} 
                     defaultValue={userItem.email} 
                     label="E-mail" 
@@ -180,14 +180,14 @@ export function UserModal(props) {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: "row", gap: "20px" }}> 
                 <TextField 
-                    id="standard-basic" 
+                    id="standard-basic primeira-senha" 
                     onChange={(event) => onValueChange(event, 'senha')} 
                     defaultValue={userItem.senha}
                     label="Senha" 
                     type="password" 
                     variant="standard"/>
                 <TextField 
-                    id="standard-basic" 
+                    id="standard-basic segunda-senha" 
                     onChange={(event) => onValueChange(event, 'secondPassword')} 
                     defaultValue={userItem.senha}
                     label="Repetir Senha" 
@@ -219,13 +219,13 @@ export function UserModal(props) {
         <Modal open={props.open}>
             <Box sx={style}>
                 <Box id="modal-header" sx={{ display: 'flex', mb: 2 }}>
-                    <div class="title">
+                    <div className="title">
                         <Person fontSize="large" style={{fill: "#647A79"}}/>
                         <Box sx={{ ml: 1, color: "#647A79" }}>
                             Usuários /
                         </Box>
                     </div>
-                    <div class="title">
+                    <div className="title">
                         <Box sx={{ ml: 1 }}>
                             {actionText} Usuário
                         </Box>

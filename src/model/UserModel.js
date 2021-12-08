@@ -1,5 +1,3 @@
-import { NoMealsOutlined } from "@mui/icons-material";
-
 export default class UserModel {
     constructor(id = '', email = '', login = '', nome = '', papeis = [], matricula = '', senha = '') {
         this.id = id

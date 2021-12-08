@@ -40,13 +40,13 @@ export default function DeleteUserModal() {
             >
                 <Box sx={style}>
                     <Box id="modal-header" sx={{ display: 'flex', mb: 2 }}> 
-                        <div class="title">
+                        <div className="title">
                             <Person fontSize="large" style={{fill: "#647A79"}}/>
                             <Box sx={{ ml: 1, color: "#647A79" }}>
                                 Usuários /
                             </Box>
                         </div>
-                        <div class="title">
+                        <div className="title">
                             <Box sx={{ ml: 1 }}>
                                 Deletar usuário
                             </Box>
