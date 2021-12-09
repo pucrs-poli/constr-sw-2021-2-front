@@ -18,7 +18,6 @@ export default function Predios() {
     const [modalItem, setModalItem] = React.useState({});
     const [tableList, setTableList] = useState([]);
     const [redirect, setRedirect] = useState(false);
-    const [redirectState, setRedirectState] = useState({});
 
     const keysLabels = {
         name: "Nome",
@@ -66,6 +65,7 @@ export default function Predios() {
     }
 
     const handleItemEditar = async (item) => {
+
         const updateObj = new Predio(item.id,
             item.name, item.location);
 

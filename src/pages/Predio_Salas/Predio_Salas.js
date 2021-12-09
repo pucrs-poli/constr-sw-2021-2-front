@@ -93,9 +93,7 @@ export default function Predio_Salas(props) {
     const handleItemSalvar = async (item) => {
         const displayName = `${item.name} - ${buildingData.name}`
         const newItem = new Sala("", item.name, buildingData.id, item.capacity, displayName)
-        console.log(newItem)
         await createRoom(newItem).then((result) => {
-            console.log(result);
             newItem.id = result.data.id;
             setTableList([...tableList, newItem]);
         }).catch((err) => {

@@ -45,7 +45,7 @@ export default class AppTableItem extends React.Component {
                     }
                 </Box>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton onClick={this.onEditClick}>
+                    <IconButton onClick={(event) => { event.stopPropagation(); this.onEditClick(); }}>
                         <Edit />
                     </IconButton>
                     <IconButton onClick={this.onRemoveClick}>
