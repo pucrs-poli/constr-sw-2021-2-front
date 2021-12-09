@@ -59,7 +59,7 @@ export function SalaConfirmaDialog(props) {
                     fullWidth
                     variant="filled"
                     defaultValue={roomItem.classBuilding.id}
-                    onChange={(event) => onValueChange(event, 'classBuilding.id')}
+                    onChange={(event) => onValueChange(event, 'classBuilding')}
                 />}
             <TextField
                 margin="dense"

@@ -49,7 +49,10 @@ export default function Salas() {
         let action = undefined;
         switch (actionType) {
             case 'Editar':
-                action = () => { handleItemEditar(SalaItem) }
+                action = e => {
+                    console.log(e);
+                    handleItemEditar(SalaItem)
+                }
                 break;
             case 'Cadastrar':
                 action = () => { handleItemSalvar(SalaItem); }
@@ -71,7 +74,7 @@ export default function Salas() {
         setModalActionName(actionName)
     }
 
-    const handleItemEditar = async (item) => {
+    const handleItemEditar = async (item, e) => {
         const updateObj = new Sala(item.id,
             item.name, item.classBuilding,
             item.capacity,
@@ -92,6 +95,7 @@ export default function Salas() {
         await createRoom(newItem).then((result) => {
             console.log(result);
             newItem.id = result.data.id;
+            newItem.displayName = `${item.name} - ${result.data.building.name}`;
             setTableList([...tableList, newItem]);
         }).catch((err) => {
             console.log("Not able to create new Room");
@@ -167,7 +171,7 @@ export default function Salas() {
                 items={tableList}
                 keysLabels={keysLabels}
                 titleKey={titleKey}
-                onEditClick={(id) => handleCRUDClick(id, acoes.edita)}
+                onEditClick={(id, event) => { console.log(event); handleCRUDClick(id, acoes.edita) }}
                 onRemoveClick={(id) => handleCRUDClick(id, acoes.remove)}
             ></AppTable>
 
