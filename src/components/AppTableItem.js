@@ -48,7 +48,7 @@ export default class AppTableItem extends React.Component {
                     <IconButton onClick={(event) => { event.stopPropagation(); this.onEditClick(); }}>
                         <Edit />
                     </IconButton>
-                    <IconButton onClick={this.onRemoveClick}>
+                    <IconButton onClick={(event) => { event.stopPropagation(); this.onRemoveClick(); }}>
                         <Delete color="error" />
                     </IconButton>
                 </Box>
