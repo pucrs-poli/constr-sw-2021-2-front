@@ -1,6 +1,8 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+export let returnedActionObject = {}
 
 export const actionTypes = {
     create: 'Cadastrar',
@@ -11,11 +13,18 @@ export const actionTypes = {
 export function TurmasConfirmationDialog(props) {
     const actionText = props.action;
     const turmasItem = props.item;
+    const [actionObject, setActionObject] = useState([]);
 
     const actionTextLC = () => (actionText || "").toLowerCase();
 
+    useEffect(() => {
+        returnedActionObject = actionObject
+    }, [actionObject])
+
     const handleConfirmClick = () => {
         console.log(turmasItem);
+        console.log(actionText)
+        setActionObject({actionType: actionText, item: turmasItem})
         closeDialog();
     }
 
