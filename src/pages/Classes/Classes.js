@@ -1,35 +1,45 @@
 import { MenuBook, Search } from "@mui/icons-material";
 import { InputAdornment, TextField, Fab } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AppTable from '../../components/AppTable';
 import { ClassConfirmationDialog, actionTypes } from '../../components/ClassConfirmationDialog';
 import './Classes.css';
 import { Add } from "@mui/icons-material";
 import Class from '../../model/Class';
+import moment from "moment";
+import ClassesService from "../../service/ClassesService";
 
 export default function Classes() {
+    const classesService = new ClassesService();
     const keysLabels = {
-        group: "Grupo",
-        resources: "Recursos",
+        numTurma: "Turma",
+        disciplina: "Disciplina",
+        reserva: {
+            text: "Reserva",
+            value: resource => resource.Recurso.name
+        },
     };
 
-    const titleKey = "title";
+    const titleKey = "date";
 
-    const mockClasses = [
-        new Class('0001', 'Apresentação Trabalho Constr. Software', 'T11', 'Notebook #32'),
-        new Class('0002', 'Inteligência Artificial', 'T9', 'Controle Remoto #32'),
-        new Class('0003', 'Natação Aula Prática', 'T13', 'Projetor #32'),
-        new Class('0004', 'Aula no Prédio 90', 'T12A', 'Câmera #32'),
-    ]
+    const [classes, setClasses] = useState([]);
     const [modalOpen, setModalOpen] = React.useState(false);
     const [modalAction, setModalAction] = React.useState('');
     const [modalItem, setModalItem] = React.useState({});
 
+    useEffect(() => {
+        classesService.getAllClasses()
+            .then(arrClasses => {
+                const classEntities = arrClasses.map(objClass => new Class(objClass))
+                setClasses(classEntities);
+            });
+    }, [])
+
     const handleCRUDClick = (id, actionType) => {
         const classItem = id
-            ? mockClasses.find(objClass => objClass.id === id)
-            : new Class();
+            ? classes.find(objClass => objClass.id === id)
+            : new Class({});
 
         openModal(actionType, classItem);
     }
@@ -40,9 +50,24 @@ export default function Classes() {
         setModalOpen(true);
     }
 
-    const handleSearchInputChange = (event) => {
+    const handleSearchInputChange = async (event) => {
         const searchString = event.target.value;
-        // TODO: chamar serviço que filtra a aula.
+        const result = await classesService.getClassByDisciplina(searchString);
+        setClasses(result);
+    }
+
+    const formatTitle = (title) => {
+        return moment(title).format('DD/MM/YYYY');
+    }
+
+    const handleCreated = (objClass) => {
+        const arrClasses = [...classes, new Class(objClass)];
+        setClasses(arrClasses);
+    }
+
+    const handleDeleted = (id) => {
+        const arrClasses = classes.filter(e => e.id !== id);
+        setClasses(arrClasses);
     }
 
     return (
@@ -56,7 +81,7 @@ export default function Classes() {
                 </div>
 
                 <Box sx={{ display: 'flex', alignItems: 'end' }}>
-                    <TextField id="outlined-basic" placeholder="Pesquisar aula" variant="filled" onChange={handleSearchInputChange} InputProps={{
+                    <TextField id="outlined-basic" placeholder="Pesquisar por disciplina" variant="filled" onChange={handleSearchInputChange} InputProps={{
                         startAdornment: (
                             <InputAdornment position="start" >
                                 <Search />
@@ -69,13 +94,13 @@ export default function Classes() {
                 </Box>
             </Box>
 
-            <AppTable items={mockClasses} keysLabels={keysLabels} titleKey={titleKey} onEditClick={(id) => handleCRUDClick(id, actionTypes.edit)} onRemoveClick={(id) => handleCRUDClick(id, actionTypes.remove)}></AppTable>
+            <AppTable items={classes} keysLabels={keysLabels} titleKey={titleKey} onEditClick={(id) => handleCRUDClick(id, actionTypes.edit)} onRemoveClick={(id) => handleCRUDClick(id, actionTypes.remove)} fnFormat={formatTitle}></AppTable>
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
                 <Fab variant="extended" color="primary" sx={{ minWidth: 150 }} onClick={() => handleCRUDClick(null, actionTypes.create)}><Add />CRIAR</Fab>
             </Box>
 
-            <ClassConfirmationDialog open={modalOpen} action={modalAction} item={modalItem} toggleModal={(open) => setModalOpen(open)} />
+            <ClassConfirmationDialog open={modalOpen} action={modalAction} item={modalItem} toggleModal={(open) => setModalOpen(open)} onCreated={handleCreated} onDeleted={handleDeleted} />
         </Box >
     );
 }
