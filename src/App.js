@@ -5,6 +5,8 @@ import Classes from './pages/Classes/Classes';
 import ResourceTypes from './pages/ResourceTypes/ResourceTypes';
 import Resources from './pages/Resources/Resources';
 import Alunos from './pages/Alunos/Alunos';
+import Turmas from './pages/Turmas/Turmas';
+import Disciplinas from './pages/Disciplinas/Disciplinas';
 import Matriculas from './pages/Matriculas/Matriculas';
 import Users from './pages/Users/Users';
 import AppToolbar from "./components/AppToolbar";
@@ -40,6 +42,8 @@ function App() {
             <Route path='/tipos_recursos' element={<ResourceTypes />} />
             <Route path='/recursos/:tipo_recurso' element={<Resources />} />
             <Route path='/alunos' element={<Alunos />} />
+            <Route path='/turmas' element={<Turmas />} />
+            <Route path='/disciplinas' element={<Disciplinas />} />
             <Route path='/alunos/:aluno_id/matriculas' element={<Matriculas />} />
             <Route path='/usuarios' element={<Users />} />
             <Route path='/salas' element={<Salas />} />
